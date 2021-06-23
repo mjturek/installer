@@ -59,7 +59,6 @@ module "master" {
   network_name = var.powervs_network_name
 }
 
-
 data "ibm_is_subnet" "vpc_subnet" {
   name = var.powervs_vpc_subnet_name
 }
