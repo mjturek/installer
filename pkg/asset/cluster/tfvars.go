@@ -15,6 +15,7 @@ import (
 	kubevirtutils "github.com/openshift/cluster-api-provider-kubevirt/pkg/utils"
 	libvirtprovider "github.com/openshift/cluster-api-provider-libvirt/pkg/apis/libvirtproviderconfig/v1beta1"
 	ovirtprovider "github.com/openshift/cluster-api-provider-ovirt/pkg/apis/ovirtprovider/v1beta1"
+	powervsprovider "github.com/openshift-powervs/cluster-api-provider-powervs/pkg/apis/powervsprovider/v1alpha1"
 	vsphereprovider "github.com/openshift/machine-api-operator/pkg/apis/vsphereprovider/v1beta1"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -45,6 +46,7 @@ import (
 	libvirttfvars "github.com/openshift/installer/pkg/tfvars/libvirt"
 	openstacktfvars "github.com/openshift/installer/pkg/tfvars/openstack"
 	ovirttfvars "github.com/openshift/installer/pkg/tfvars/ovirt"
+	powervstfvars "githiub.com/openshift/installer/pkg/tfvars/powervs"
 	vspheretfvars "github.com/openshift/installer/pkg/tfvars/vsphere"
 	"github.com/openshift/installer/pkg/types"
 	"github.com/openshift/installer/pkg/types/aws"
@@ -566,6 +568,47 @@ func (t *TerraformVariables) Generate(parents asset.Parents) error {
 			Filename: fmt.Sprintf(TfPlatformVarsFileName, platform),
 			Data:     data,
 		})
+	case powervs.Name:
+		masters, err := mastersAsset.Machines()
+		if err != nil {
+			return err
+		}
+		masterConfigs := make([]*powervsprovider.PowerVSMachineProviderSpec, len(masters))
+		for i, m := range masters {
+			masterConfigs[i] = m.Spec.Template.Spec.ProviderSpec.Value.Object.(*powervsprovider.PowerVSProviderSpec)
+		}
+
+		auth = powervstfvars.IBMCloudAuth{
+			IBMCloudAPIKey:	"",
+			IBMCloudRegion:	"",
+			IBMCloudZone:	"",
+		}
+
+		cosInfo = powervstfvars.COSInfo{
+			COSInstanceLocation:	"",
+			COSBucketLocation:	"",
+			COSStorageClass:	"",
+		}
+
+		vpc = powervstfvars.IBMCloudVPC{
+			VPCName:	"",
+			VPCSubnetName:	"",
+		}
+
+		data, err := powervsvars.TFVars(
+			MasterConfigs:	masterConfigs,
+			IBMCloudAuth:	auth,
+			COSInfo:	cosInfo,
+			IBMCloudVPC:	vpc,
+		)
+		if err != nil {
+			return errors.Wrapf(err, "failed to get %s Terraform variables", platform)
+		}
+		t.FileList = append(t.FileList, &asset.File{
+                        Filename: fmt.Sprintf(TfPlatformVarsFileName, platform),
+                        Data:     data,
+                })
+
 	case vsphere.Name:
 		controlPlanes, err := mastersAsset.Machines()
 		if err != nil {
