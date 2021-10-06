@@ -32,6 +32,16 @@ aliases:
     - mdbooth
     - pierreprinetti
     - stephenfin
+  powervs-approvers:
+    - Prashanth684
+    - clnperez
+    - mkumatag
+  powervs-reviewers:
+    - 23TNC
+    - clnperez
+    - mjturek
+    - mkumatag
+    - Prashanth684
   vsphere-approvers:
     - dav1x
     - jcpowermac
