@@ -10,7 +10,7 @@ require (
 	github.com/Azure/go-autorest/autorest/azure/auth v0.4.1
 	github.com/Azure/go-autorest/autorest/to v0.4.0
 	github.com/IBM-Cloud/bluemix-go v0.0.0-20210611051827-cdc80c935c05
-	github.com/IBM-Cloud/power-go-client v1.0.56
+	github.com/IBM-Cloud/power-go-client v1.0.72
 	github.com/IBM-Cloud/terraform-provider-ibm v1.26.2
 	github.com/IBM/go-sdk-core/v5 v5.4.3
 	github.com/IBM/networking-go-sdk v0.14.0
@@ -192,3 +192,4 @@ replace k8s.io/client-go => k8s.io/client-go v0.23.0
 
 // Needed so that the InstallConfig CRD can be created. Later versions of controller-gen balk at using IPNet as a field.
 replace sigs.k8s.io/controller-tools => sigs.k8s.io/controller-tools v0.3.1-0.20200617211605-651903477185
+replace github.com/openshift/machine-api-operator => github.com/openshift-powervs/machine-api-operator v0.2.1-0.20210809115935-a9fd8f5d2767
