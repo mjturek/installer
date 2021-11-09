@@ -65,6 +65,69 @@ github.com/BurntSushi/toml
 github.com/IBM-Cloud/bluemix-go/crn
 # github.com/IBM/go-sdk-core/v4 v4.9.0
 ## explicit; go 1.12
+github.com/IBM-Cloud/bluemix-go/endpoints
+github.com/IBM-Cloud/bluemix-go/helpers
+github.com/IBM-Cloud/bluemix-go/http
+github.com/IBM-Cloud/bluemix-go/models
+github.com/IBM-Cloud/bluemix-go/rest
+github.com/IBM-Cloud/bluemix-go/session
+github.com/IBM-Cloud/bluemix-go/trace
+github.com/IBM-Cloud/bluemix-go/utils
+# github.com/IBM-Cloud/power-go-client v1.0.72
+## explicit
+github.com/IBM-Cloud/power-go-client/clients/instance
+github.com/IBM-Cloud/power-go-client/errors
+github.com/IBM-Cloud/power-go-client/helpers
+github.com/IBM-Cloud/power-go-client/ibmpisession
+github.com/IBM-Cloud/power-go-client/power/client
+github.com/IBM-Cloud/power-go-client/power/client/authentication
+github.com/IBM-Cloud/power-go-client/power/client/bluemix_service_instances
+github.com/IBM-Cloud/power-go-client/power/client/catalog
+github.com/IBM-Cloud/power-go-client/power/client/hardware_platforms
+github.com/IBM-Cloud/power-go-client/power/client/iaas_service_broker
+github.com/IBM-Cloud/power-go-client/power/client/open_stacks
+github.com/IBM-Cloud/power-go-client/power/client/p_cloud_cloud_connections
+github.com/IBM-Cloud/power-go-client/power/client/p_cloud_events
+github.com/IBM-Cloud/power-go-client/power/client/p_cloud_images
+github.com/IBM-Cloud/power-go-client/power/client/p_cloud_instances
+github.com/IBM-Cloud/power-go-client/power/client/p_cloud_networks
+github.com/IBM-Cloud/power-go-client/power/client/p_cloud_p_vm_instances
+github.com/IBM-Cloud/power-go-client/power/client/p_cloud_placement_groups
+github.com/IBM-Cloud/power-go-client/power/client/p_cloud_s_a_p
+github.com/IBM-Cloud/power-go-client/power/client/p_cloud_snapshots
+github.com/IBM-Cloud/power-go-client/power/client/p_cloud_storage_capacity
+github.com/IBM-Cloud/power-go-client/power/client/p_cloud_system_pools
+github.com/IBM-Cloud/power-go-client/power/client/p_cloud_tasks
+github.com/IBM-Cloud/power-go-client/power/client/p_cloud_tenants
+github.com/IBM-Cloud/power-go-client/power/client/p_cloud_tenants_ssh_keys
+github.com/IBM-Cloud/power-go-client/power/client/p_cloud_volumes
+github.com/IBM-Cloud/power-go-client/power/client/service_bindings
+github.com/IBM-Cloud/power-go-client/power/client/service_instances
+github.com/IBM-Cloud/power-go-client/power/client/storage_types
+github.com/IBM-Cloud/power-go-client/power/client/swagger_spec
+github.com/IBM-Cloud/power-go-client/power/models
+github.com/IBM-Cloud/power-go-client/utils
+# github.com/IBM-Cloud/terraform-provider-ibm v1.26.2 => github.com/openshift/terraform-provider-ibm v1.26.2-openshift-2
+## explicit
+github.com/IBM-Cloud/terraform-provider-ibm/ibm
+github.com/IBM-Cloud/terraform-provider-ibm/ibm/internal/hashcode
+github.com/IBM-Cloud/terraform-provider-ibm/ibm/internal/mutexkv
+github.com/IBM-Cloud/terraform-provider-ibm/version
+# github.com/IBM/apigateway-go-sdk v0.0.0-20210714141226-a5d5d49caaca
+github.com/IBM/apigateway-go-sdk/apigatewaycontrollerapiv1
+github.com/IBM/apigateway-go-sdk/common
+# github.com/IBM/appconfiguration-go-admin-sdk v0.1.0
+github.com/IBM/appconfiguration-go-admin-sdk/appconfigurationv1
+github.com/IBM/appconfiguration-go-admin-sdk/common
+# github.com/IBM/container-registry-go-sdk v0.0.13
+github.com/IBM/container-registry-go-sdk/common
+github.com/IBM/container-registry-go-sdk/containerregistryv1
+# github.com/IBM/go-sdk-core v1.1.0
+github.com/IBM/go-sdk-core/core
+# github.com/IBM/go-sdk-core/v3 v3.3.1
+github.com/IBM/go-sdk-core/v3/core
+# github.com/IBM/go-sdk-core/v4 v4.10.0
+>>>>>>> afe67d0bf... go.sum in lieu of complete vendoring
 github.com/IBM/go-sdk-core/v4/core
 # github.com/IBM/go-sdk-core/v5 v5.4.3
 ## explicit; go 1.12
@@ -504,6 +567,20 @@ github.com/openshift/cluster-api-provider-ovirt/pkg/apis/ovirtprovider/v1beta1
 ## explicit; go 1.16
 github.com/openshift/library-go/pkg/config/clusteroperator/v1helpers
 github.com/openshift/library-go/pkg/route/routeapihelpers
+# github.com/openshift/cluster-api-provider-powervs v0.0.2-0.20210928133618-8eb5ebcb07a1
+## explicit
+github.com/openshift/cluster-api-provider-powervs/pkg/apis
+github.com/openshift/cluster-api-provider-powervs/pkg/apis/powervsprovider/v1alpha1
+# github.com/openshift/library-go v0.0.0-20210408164723-7a65fdb398e2
+## explicit
+github.com/openshift/library-go/pkg/config/clusteroperator/v1helpers
+github.com/openshift/library-go/pkg/route/routeapihelpers
+# github.com/openshift/machine-api-operator v0.2.1-0.20210505133115-b7ef098180db => github.com/openshift-powervs/machine-api-operator v0.2.1-0.20210809115935-a9fd8f5d2767
+## explicit
+github.com/openshift/machine-api-operator/pkg/apis/machine
+github.com/openshift/machine-api-operator/pkg/apis/machine/v1beta1
+github.com/openshift/machine-api-operator/pkg/apis/vsphereprovider
+github.com/openshift/machine-api-operator/pkg/apis/vsphereprovider/v1beta1
 # github.com/openshift/machine-config-operator v0.0.0 => github.com/openshift/machine-config-operator v0.0.1-0.20201009041932-4fe8559913b8
 ## explicit; go 1.13
 github.com/openshift/machine-config-operator/pkg/apis/machineconfiguration.openshift.io/v1
@@ -1229,3 +1306,15 @@ sigs.k8s.io/yaml
 # github.com/openshift/machine-config-operator => github.com/openshift/machine-config-operator v0.0.1-0.20201009041932-4fe8559913b8
 # k8s.io/client-go => k8s.io/client-go v0.23.0
 # sigs.k8s.io/controller-tools => sigs.k8s.io/controller-tools v0.3.1-0.20200617211605-651903477185
+# github.com/IBM/vpc-go-sdk => github.com/IBM/vpc-go-sdk v0.7.0
+# github.com/apparentlymart/go-cidr => github.com/apparentlymart/go-cidr v1.0.1
+# github.com/aws/aws-sdk-go => github.com/aws/aws-sdk-go v1.32.3
+# github.com/go-openapi/errors => github.com/go-openapi/errors v0.19.2
+# github.com/go-openapi/spec => github.com/go-openapi/spec v0.19.4
+# github.com/go-openapi/validate => github.com/go-openapi/validate v0.19.8
+# github.com/hashicorp/go-plugin => github.com/hashicorp/go-plugin v1.2.2
+# github.com/ulikunitz/xz => github.com/ulikunitz/xz v0.5.7
+# google.golang.org/api => google.golang.org/api v0.25.0
+# google.golang.org/genproto => google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013
+# google.golang.org/grpc => google.golang.org/grpc v1.29.1
+# github.com/openshift/machine-api-operator => github.com/openshift-powervs/machine-api-operator v0.2.1-0.20210809115935-a9fd8f5d2767
