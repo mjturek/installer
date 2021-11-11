@@ -59,9 +59,55 @@ github.com/Azure/go-autorest/logger
 github.com/Azure/go-autorest/tracing
 # github.com/BurntSushi/toml v0.3.1
 ## explicit
+<<<<<<< HEAD
 github.com/BurntSushi/toml
 # github.com/IBM-Cloud/bluemix-go v0.0.0-20210611051827-cdc80c935c05
 ## explicit; go 1.13
+=======
+github.com/ChrisTrenkamp/goxpath
+github.com/ChrisTrenkamp/goxpath/internal/execxp
+github.com/ChrisTrenkamp/goxpath/internal/execxp/findutil
+github.com/ChrisTrenkamp/goxpath/internal/execxp/intfns
+github.com/ChrisTrenkamp/goxpath/internal/xsort
+github.com/ChrisTrenkamp/goxpath/lexer
+github.com/ChrisTrenkamp/goxpath/parser
+github.com/ChrisTrenkamp/goxpath/parser/pathexpr
+github.com/ChrisTrenkamp/goxpath/tree
+github.com/ChrisTrenkamp/goxpath/tree/xmltree
+github.com/ChrisTrenkamp/goxpath/tree/xmltree/xmlbuilder
+github.com/ChrisTrenkamp/goxpath/tree/xmltree/xmlele
+github.com/ChrisTrenkamp/goxpath/tree/xmltree/xmlnode
+github.com/ChrisTrenkamp/goxpath/xconst
+# github.com/IBM-Cloud/bluemix-go v0.0.0-20210706092416-dc4055f8e0ea
+## explicit
+github.com/IBM-Cloud/bluemix-go
+github.com/IBM-Cloud/bluemix-go/api/account/accountv1
+github.com/IBM-Cloud/bluemix-go/api/account/accountv2
+github.com/IBM-Cloud/bluemix-go/api/certificatemanager
+github.com/IBM-Cloud/bluemix-go/api/cis/cisv1
+github.com/IBM-Cloud/bluemix-go/api/container/containerv1
+github.com/IBM-Cloud/bluemix-go/api/container/containerv2
+github.com/IBM-Cloud/bluemix-go/api/functions
+github.com/IBM-Cloud/bluemix-go/api/globalsearch/globalsearchv2
+github.com/IBM-Cloud/bluemix-go/api/globaltagging/globaltaggingv3
+github.com/IBM-Cloud/bluemix-go/api/hpcs
+github.com/IBM-Cloud/bluemix-go/api/iam/iamv1
+github.com/IBM-Cloud/bluemix-go/api/iampap/iampapv1
+github.com/IBM-Cloud/bluemix-go/api/iampap/iampapv2
+github.com/IBM-Cloud/bluemix-go/api/iamuum/iamuumv1
+github.com/IBM-Cloud/bluemix-go/api/iamuum/iamuumv2
+github.com/IBM-Cloud/bluemix-go/api/icd/icdv4
+github.com/IBM-Cloud/bluemix-go/api/mccp/mccpv2
+github.com/IBM-Cloud/bluemix-go/api/resource/resourcev1/catalog
+github.com/IBM-Cloud/bluemix-go/api/resource/resourcev1/controller
+github.com/IBM-Cloud/bluemix-go/api/resource/resourcev2/controllerv2
+github.com/IBM-Cloud/bluemix-go/api/resource/resourcev2/managementv2
+github.com/IBM-Cloud/bluemix-go/api/schematics
+github.com/IBM-Cloud/bluemix-go/api/usermanagement/usermanagementv2
+github.com/IBM-Cloud/bluemix-go/authentication
+github.com/IBM-Cloud/bluemix-go/bmxerror
+github.com/IBM-Cloud/bluemix-go/client
+>>>>>>> 160b69041... Import image via COS (#68)
 github.com/IBM-Cloud/bluemix-go/crn
 # github.com/IBM/go-sdk-core/v4 v4.9.0
 ## explicit; go 1.12
@@ -73,7 +119,10 @@ github.com/IBM-Cloud/bluemix-go/rest
 github.com/IBM-Cloud/bluemix-go/session
 github.com/IBM-Cloud/bluemix-go/trace
 github.com/IBM-Cloud/bluemix-go/utils
-# github.com/IBM-Cloud/power-go-client v1.0.72
+# github.com/IBM-Cloud/container-services-go-sdk v0.0.0-20210705152127-41ca00fc9a62
+github.com/IBM-Cloud/container-services-go-sdk/common
+github.com/IBM-Cloud/container-services-go-sdk/kubernetesserviceapiv1
+# github.com/IBM-Cloud/power-go-client v1.0.72 => github.com/yussufsh/power-go-client v1.99.4
 ## explicit
 github.com/IBM-Cloud/power-go-client/clients/instance
 github.com/IBM-Cloud/power-go-client/errors
@@ -90,16 +139,20 @@ github.com/IBM-Cloud/power-go-client/power/client/p_cloud_cloud_connections
 github.com/IBM-Cloud/power-go-client/power/client/p_cloud_events
 github.com/IBM-Cloud/power-go-client/power/client/p_cloud_images
 github.com/IBM-Cloud/power-go-client/power/client/p_cloud_instances
+github.com/IBM-Cloud/power-go-client/power/client/p_cloud_jobs
 github.com/IBM-Cloud/power-go-client/power/client/p_cloud_networks
 github.com/IBM-Cloud/power-go-client/power/client/p_cloud_p_vm_instances
 github.com/IBM-Cloud/power-go-client/power/client/p_cloud_placement_groups
 github.com/IBM-Cloud/power-go-client/power/client/p_cloud_s_a_p
+github.com/IBM-Cloud/power-go-client/power/client/p_cloud_service_d_h_c_p
 github.com/IBM-Cloud/power-go-client/power/client/p_cloud_snapshots
 github.com/IBM-Cloud/power-go-client/power/client/p_cloud_storage_capacity
 github.com/IBM-Cloud/power-go-client/power/client/p_cloud_system_pools
 github.com/IBM-Cloud/power-go-client/power/client/p_cloud_tasks
 github.com/IBM-Cloud/power-go-client/power/client/p_cloud_tenants
 github.com/IBM-Cloud/power-go-client/power/client/p_cloud_tenants_ssh_keys
+github.com/IBM-Cloud/power-go-client/power/client/p_cloud_v_p_n_connections
+github.com/IBM-Cloud/power-go-client/power/client/p_cloud_v_p_n_policies
 github.com/IBM-Cloud/power-go-client/power/client/p_cloud_volumes
 github.com/IBM-Cloud/power-go-client/power/client/service_bindings
 github.com/IBM-Cloud/power-go-client/power/client/service_instances
@@ -107,7 +160,7 @@ github.com/IBM-Cloud/power-go-client/power/client/storage_types
 github.com/IBM-Cloud/power-go-client/power/client/swagger_spec
 github.com/IBM-Cloud/power-go-client/power/models
 github.com/IBM-Cloud/power-go-client/utils
-# github.com/IBM-Cloud/terraform-provider-ibm v1.26.2 => github.com/openshift/terraform-provider-ibm v1.26.2-openshift-2
+# github.com/IBM-Cloud/terraform-provider-ibm v1.26.2 => github.com/yussufsh/terraform-provider-ibm v1.89.0
 ## explicit
 github.com/IBM-Cloud/terraform-provider-ibm/ibm
 github.com/IBM-Cloud/terraform-provider-ibm/ibm/internal/hashcode
@@ -122,20 +175,101 @@ github.com/IBM/appconfiguration-go-admin-sdk/common
 # github.com/IBM/container-registry-go-sdk v0.0.13
 github.com/IBM/container-registry-go-sdk/common
 github.com/IBM/container-registry-go-sdk/containerregistryv1
-# github.com/IBM/go-sdk-core v1.1.0
-github.com/IBM/go-sdk-core/core
-# github.com/IBM/go-sdk-core/v3 v3.3.1
+# github.com/IBM/go-sdk-core/v3 v3.2.4
 github.com/IBM/go-sdk-core/v3/core
 # github.com/IBM/go-sdk-core/v4 v4.10.0
 >>>>>>> afe67d0bf... go.sum in lieu of complete vendoring
 github.com/IBM/go-sdk-core/v4/core
+<<<<<<< HEAD
 # github.com/IBM/go-sdk-core/v5 v5.4.3
 ## explicit; go 1.12
 github.com/IBM/go-sdk-core/v5/core
 # github.com/IBM/networking-go-sdk v0.14.0
 ## explicit; go 1.14
+=======
+# github.com/IBM/go-sdk-core/v5 v5.5.1
+## explicit
+github.com/IBM/go-sdk-core/v5/core
+# github.com/IBM/ibm-cos-sdk-go v1.7.0
+github.com/IBM/ibm-cos-sdk-go/aws
+github.com/IBM/ibm-cos-sdk-go/aws/arn
+github.com/IBM/ibm-cos-sdk-go/aws/awserr
+github.com/IBM/ibm-cos-sdk-go/aws/awsutil
+github.com/IBM/ibm-cos-sdk-go/aws/client
+github.com/IBM/ibm-cos-sdk-go/aws/client/metadata
+github.com/IBM/ibm-cos-sdk-go/aws/corehandlers
+github.com/IBM/ibm-cos-sdk-go/aws/credentials
+github.com/IBM/ibm-cos-sdk-go/aws/credentials/endpointcreds
+github.com/IBM/ibm-cos-sdk-go/aws/credentials/ibmiam
+github.com/IBM/ibm-cos-sdk-go/aws/credentials/ibmiam/token
+github.com/IBM/ibm-cos-sdk-go/aws/credentials/ibmiam/tokenmanager
+github.com/IBM/ibm-cos-sdk-go/aws/credentials/processcreds
+github.com/IBM/ibm-cos-sdk-go/aws/defaults
+github.com/IBM/ibm-cos-sdk-go/aws/endpoints
+github.com/IBM/ibm-cos-sdk-go/aws/request
+github.com/IBM/ibm-cos-sdk-go/aws/session
+github.com/IBM/ibm-cos-sdk-go/aws/signer
+github.com/IBM/ibm-cos-sdk-go/aws/signer/ibmiam
+github.com/IBM/ibm-cos-sdk-go/aws/signer/v4
+github.com/IBM/ibm-cos-sdk-go/internal/ini
+github.com/IBM/ibm-cos-sdk-go/internal/s3shared
+github.com/IBM/ibm-cos-sdk-go/internal/s3shared/arn
+github.com/IBM/ibm-cos-sdk-go/internal/s3shared/s3err
+github.com/IBM/ibm-cos-sdk-go/internal/sdkio
+github.com/IBM/ibm-cos-sdk-go/internal/sdkmath
+github.com/IBM/ibm-cos-sdk-go/internal/sdkrand
+github.com/IBM/ibm-cos-sdk-go/internal/shareddefaults
+github.com/IBM/ibm-cos-sdk-go/internal/strings
+github.com/IBM/ibm-cos-sdk-go/internal/sync/singleflight
+github.com/IBM/ibm-cos-sdk-go/private/checksum
+github.com/IBM/ibm-cos-sdk-go/private/protocol
+github.com/IBM/ibm-cos-sdk-go/private/protocol/json/jsonutil
+github.com/IBM/ibm-cos-sdk-go/private/protocol/query
+github.com/IBM/ibm-cos-sdk-go/private/protocol/query/queryutil
+github.com/IBM/ibm-cos-sdk-go/private/protocol/rest
+github.com/IBM/ibm-cos-sdk-go/private/protocol/restxml
+github.com/IBM/ibm-cos-sdk-go/private/protocol/xml/xmlutil
+github.com/IBM/ibm-cos-sdk-go/service/s3
+# github.com/IBM/ibm-cos-sdk-go-config v1.2.0
+github.com/IBM/ibm-cos-sdk-go-config/common
+github.com/IBM/ibm-cos-sdk-go-config/resourceconfigurationv1
+# github.com/IBM/ibm-hpcs-tke-sdk v0.0.0-20210723145459-a232c3f3ac91
+github.com/IBM/ibm-hpcs-tke-sdk/common
+github.com/IBM/ibm-hpcs-tke-sdk/ep11cmds
+github.com/IBM/ibm-hpcs-tke-sdk/rest
+github.com/IBM/ibm-hpcs-tke-sdk/tkesdk
+# github.com/IBM/keyprotect-go-client v0.7.0
+github.com/IBM/keyprotect-go-client
+github.com/IBM/keyprotect-go-client/iam
+# github.com/IBM/networking-go-sdk v0.19.0
+## explicit
+github.com/IBM/networking-go-sdk/cachingapiv1
+github.com/IBM/networking-go-sdk/cisipapiv1
+>>>>>>> 160b69041... Import image via COS (#68)
 github.com/IBM/networking-go-sdk/common
 github.com/IBM/networking-go-sdk/dnsrecordsv1
+<<<<<<< HEAD
+=======
+github.com/IBM/networking-go-sdk/dnssvcsv1
+github.com/IBM/networking-go-sdk/edgefunctionsapiv1
+github.com/IBM/networking-go-sdk/filtersv1
+github.com/IBM/networking-go-sdk/globalloadbalancermonitorv1
+github.com/IBM/networking-go-sdk/globalloadbalancerpoolsv0
+github.com/IBM/networking-go-sdk/globalloadbalancerv1
+github.com/IBM/networking-go-sdk/pageruleapiv1
+github.com/IBM/networking-go-sdk/rangeapplicationsv1
+github.com/IBM/networking-go-sdk/routingv1
+github.com/IBM/networking-go-sdk/sslcertificateapiv1
+github.com/IBM/networking-go-sdk/transitgatewayapisv1
+github.com/IBM/networking-go-sdk/useragentblockingrulesv1
+github.com/IBM/networking-go-sdk/wafrulegroupsapiv1
+github.com/IBM/networking-go-sdk/wafrulepackagesapiv1
+github.com/IBM/networking-go-sdk/wafrulesapiv1
+github.com/IBM/networking-go-sdk/zonefirewallaccessrulesv1
+github.com/IBM/networking-go-sdk/zonelockdownv1
+github.com/IBM/networking-go-sdk/zoneratelimitsv1
+github.com/IBM/networking-go-sdk/zonessettingsv1
+>>>>>>> 160b69041... Import image via COS (#68)
 github.com/IBM/networking-go-sdk/zonesv1
 # github.com/IBM/platform-services-go-sdk v0.18.16
 ## explicit; go 1.12
@@ -144,12 +278,73 @@ github.com/IBM/platform-services-go-sdk/iamidentityv1
 github.com/IBM/platform-services-go-sdk/iampolicymanagementv1
 github.com/IBM/platform-services-go-sdk/resourcecontrollerv2
 github.com/IBM/platform-services-go-sdk/resourcemanagerv2
+<<<<<<< HEAD
 # github.com/IBM/vpc-go-sdk v1.0.1
 ## explicit; go 1.14
 github.com/IBM/vpc-go-sdk/common
 github.com/IBM/vpc-go-sdk/vpcv1
 # github.com/aliyun/alibaba-cloud-sdk-go v1.61.1264
 ## explicit; go 1.13
+=======
+# github.com/IBM/push-notifications-go-sdk v0.0.0-20210310100607-5790b96c47f5
+github.com/IBM/push-notifications-go-sdk/common
+github.com/IBM/push-notifications-go-sdk/pushservicev1
+# github.com/IBM/schematics-go-sdk v0.0.2
+github.com/IBM/schematics-go-sdk/common
+github.com/IBM/schematics-go-sdk/schematicsv1
+# github.com/IBM/secrets-manager-go-sdk v0.1.19
+github.com/IBM/secrets-manager-go-sdk/common
+github.com/IBM/secrets-manager-go-sdk/secretsmanagerv1
+# github.com/IBM/vpc-go-sdk v1.0.1 => github.com/IBM/vpc-go-sdk v0.8.0
+## explicit
+github.com/IBM/vpc-go-sdk/common
+github.com/IBM/vpc-go-sdk/vpcv1
+# github.com/Logicalis/asn1 v0.0.0-20190312173541-d60463189a56
+github.com/Logicalis/asn1
+# github.com/MakeNowJust/heredoc v1.0.0
+github.com/MakeNowJust/heredoc
+# github.com/Netflix/go-expect v0.0.0-20190729225929-0e00d9168667
+## explicit
+# github.com/PaesslerAG/gval v1.0.0
+github.com/PaesslerAG/gval
+# github.com/PaesslerAG/jsonpath v0.1.1
+github.com/PaesslerAG/jsonpath
+# github.com/PuerkitoBio/purell v1.1.1
+github.com/PuerkitoBio/purell
+# github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578
+github.com/PuerkitoBio/urlesc
+# github.com/ScaleFT/sshkeys v0.0.0-20200327173127-6142f742bca5
+github.com/ScaleFT/sshkeys
+# github.com/Shopify/sarama v1.27.2
+github.com/Shopify/sarama
+# github.com/agext/levenshtein v1.2.3
+github.com/agext/levenshtein
+# github.com/alibabacloud-go/cs-20151215/v2 v2.4.4
+github.com/alibabacloud-go/cs-20151215/v2/client
+# github.com/alibabacloud-go/darabonba-openapi v0.1.5
+github.com/alibabacloud-go/darabonba-openapi/client
+# github.com/alibabacloud-go/debug v0.0.0-20190504072949-9472017b5c68
+github.com/alibabacloud-go/debug/debug
+# github.com/alibabacloud-go/endpoint-util v1.1.0
+github.com/alibabacloud-go/endpoint-util/service
+# github.com/alibabacloud-go/openapi-util v0.0.7
+github.com/alibabacloud-go/openapi-util/service
+# github.com/alibabacloud-go/tea v1.1.15
+github.com/alibabacloud-go/tea/tea
+github.com/alibabacloud-go/tea/utils
+# github.com/alibabacloud-go/tea-roa v1.2.8
+github.com/alibabacloud-go/tea-roa/client
+# github.com/alibabacloud-go/tea-roa-utils v1.1.5
+github.com/alibabacloud-go/tea-roa-utils/service
+# github.com/alibabacloud-go/tea-rpc v1.1.8
+github.com/alibabacloud-go/tea-rpc/client
+# github.com/alibabacloud-go/tea-rpc-utils v1.1.2
+github.com/alibabacloud-go/tea-rpc-utils/service
+# github.com/alibabacloud-go/tea-utils v1.3.9
+github.com/alibabacloud-go/tea-utils/service
+# github.com/aliyun/alibaba-cloud-sdk-go v1.61.1154
+## explicit
+>>>>>>> 160b69041... Import image via COS (#68)
 github.com/aliyun/alibaba-cloud-sdk-go/sdk
 github.com/aliyun/alibaba-cloud-sdk-go/sdk/auth
 github.com/aliyun/alibaba-cloud-sdk-go/sdk/auth/credentials
@@ -336,6 +531,8 @@ github.com/gobuffalo/flect
 ## explicit; go 1.15
 github.com/gogo/protobuf/proto
 github.com/gogo/protobuf/sortkeys
+# github.com/golang-jwt/jwt v3.2.1+incompatible
+github.com/golang-jwt/jwt
 # github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da
 ## explicit
 github.com/golang/groupcache/lru
@@ -631,8 +828,31 @@ github.com/shurcooL/vfsgen
 ## explicit; go 1.13
 github.com/sirupsen/logrus
 github.com/sirupsen/logrus/hooks/test
+<<<<<<< HEAD
 # github.com/spf13/cobra v1.2.1
 ## explicit; go 1.14
+=======
+# github.com/softlayer/softlayer-go v1.0.3 => github.com/IBM-Cloud/softlayer-go v1.0.3-tf
+github.com/softlayer/softlayer-go/config
+github.com/softlayer/softlayer-go/datatypes
+github.com/softlayer/softlayer-go/filter
+github.com/softlayer/softlayer-go/helpers/hardware
+github.com/softlayer/softlayer-go/helpers/location
+github.com/softlayer/softlayer-go/helpers/network
+github.com/softlayer/softlayer-go/helpers/order
+github.com/softlayer/softlayer-go/helpers/product
+github.com/softlayer/softlayer-go/helpers/virtual
+github.com/softlayer/softlayer-go/services
+github.com/softlayer/softlayer-go/session
+github.com/softlayer/softlayer-go/sl
+# github.com/softlayer/xmlrpc v0.0.0-20200409220501-5f089df7cb7e
+github.com/softlayer/xmlrpc
+# github.com/spf13/afero v1.3.5
+github.com/spf13/afero
+github.com/spf13/afero/mem
+# github.com/spf13/cobra v1.1.1
+## explicit
+>>>>>>> 160b69041... Import image via COS (#68)
 github.com/spf13/cobra
 # github.com/spf13/pflag v1.0.5
 ## explicit; go 1.12
@@ -707,8 +927,20 @@ go.opencensus.io/trace
 go.opencensus.io/trace/internal
 go.opencensus.io/trace/propagation
 go.opencensus.io/trace/tracestate
+<<<<<<< HEAD
 # golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
 ## explicit; go 1.17
+=======
+# go.starlark.net v0.0.0-20200306205701-8dd3e2ee1dd5
+go.starlark.net/internal/compile
+go.starlark.net/internal/spell
+go.starlark.net/resolve
+go.starlark.net/starlark
+go.starlark.net/starlarkstruct
+go.starlark.net/syntax
+# golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97
+## explicit
+>>>>>>> 160b69041... Import image via COS (#68)
 golang.org/x/crypto/bcrypt
 golang.org/x/crypto/blowfish
 golang.org/x/crypto/chacha20
@@ -733,8 +965,12 @@ golang.org/x/mod/internal/lazyregexp
 golang.org/x/mod/modfile
 golang.org/x/mod/module
 golang.org/x/mod/semver
+<<<<<<< HEAD
 # golang.org/x/net v0.0.0-20210825183410-e898025ed96a
 ## explicit; go 1.17
+=======
+# golang.org/x/net v0.0.0-20210614182718-04defd469f4e
+>>>>>>> 160b69041... Import image via COS (#68)
 golang.org/x/net/context
 golang.org/x/net/context/ctxhttp
 golang.org/x/net/http/httpguts
@@ -1300,13 +1536,30 @@ sigs.k8s.io/yaml
 # github.com/metal3-io/baremetal-operator => github.com/openshift/baremetal-operator v0.0.0-20211201170610-92ffa60c683d
 # github.com/metal3-io/baremetal-operator/apis => github.com/openshift/baremetal-operator/apis v0.0.0-20211201170610-92ffa60c683d
 # github.com/metal3-io/baremetal-operator/pkg/hardwareutils => github.com/openshift/baremetal-operator/pkg/hardwareutils v0.0.0-20211201170610-92ffa60c683d
+# cloud.google.com/go => cloud.google.com/go v0.57.0
+# github.com/IBM-Cloud/terraform-provider-ibm => github.com/yussufsh/terraform-provider-ibm v1.89.0
+# github.com/go-log/log => github.com/go-log/log v0.1.1-0.20181211034820-a514cf01a3eb
+# github.com/hashicorp/terraform => github.com/openshift/terraform v0.12.20-openshift-4
+# github.com/hashicorp/terraform-plugin-sdk => github.com/openshift/hashicorp-terraform-plugin-sdk v1.14.0-openshift
+# github.com/hashicorp/terraform-provider-vsphere => github.com/openshift/terraform-provider-vsphere v1.24.3-openshift
+# github.com/metal3-io/baremetal-operator => github.com/openshift/baremetal-operator v0.0.0-20210706141527-5240e42f012a
+# github.com/metal3-io/baremetal-operator/apis => github.com/openshift/baremetal-operator/apis v0.0.0-20210706141527-5240e42f012a
+# github.com/metal3-io/cluster-api-provider-baremetal => github.com/openshift/cluster-api-provider-baremetal v0.0.0-20190821174549-a2a477909c1d
+# github.com/openshift/client-go => github.com/openshift/client-go v0.0.0-20200929181438-91d71ef2122c
+# github.com/openshift/machine-config-operator => github.com/openshift/machine-config-operator v0.0.1-0.20201009041932-4fe8559913b8
+# github.com/terraform-providers/terraform-provider-aws => github.com/openshift/terraform-provider-aws v1.60.1-0.20210622193531-7d13cfbb1a8c
+# github.com/terraform-providers/terraform-provider-azurerm => github.com/openshift/terraform-provider-azurerm v1.44.1-0.20210224232508-7509319df0f4
+# github.com/terraform-providers/terraform-provider-azurestack => github.com/openshift/terraform-provider-azurestack v0.10.0-openshift
+# github.com/terraform-providers/terraform-provider-ignition/v2 => github.com/community-terraform-providers/terraform-provider-ignition/v2 v2.1.0
+# k8s.io/client-go => k8s.io/client-go v0.22.0
+# k8s.io/kubectl => k8s.io/kubectl v0.21.0-rc.0
 # sigs.k8s.io/cluster-api-provider-aws => github.com/openshift/cluster-api-provider-aws v0.2.1-0.20210121023454-5ffc5f422a80
 # sigs.k8s.io/cluster-api-provider-azure => github.com/openshift/cluster-api-provider-azure v0.1.0-alpha.3.0.20210626224711-5d94c794092f
 # sigs.k8s.io/cluster-api-provider-openstack => github.com/openshift/cluster-api-provider-openstack v0.0.0-20211111204942-611d320170af
 # github.com/openshift/machine-config-operator => github.com/openshift/machine-config-operator v0.0.1-0.20201009041932-4fe8559913b8
 # k8s.io/client-go => k8s.io/client-go v0.23.0
 # sigs.k8s.io/controller-tools => sigs.k8s.io/controller-tools v0.3.1-0.20200617211605-651903477185
-# github.com/IBM/vpc-go-sdk => github.com/IBM/vpc-go-sdk v0.7.0
+# github.com/IBM/vpc-go-sdk => github.com/IBM/vpc-go-sdk v0.8.0
 # github.com/apparentlymart/go-cidr => github.com/apparentlymart/go-cidr v1.0.1
 # github.com/aws/aws-sdk-go => github.com/aws/aws-sdk-go v1.32.3
 # github.com/go-openapi/errors => github.com/go-openapi/errors v0.19.2
@@ -1318,3 +1571,5 @@ sigs.k8s.io/yaml
 # google.golang.org/genproto => google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013
 # google.golang.org/grpc => google.golang.org/grpc v1.29.1
 # github.com/openshift/machine-api-operator => github.com/openshift-powervs/machine-api-operator v0.2.1-0.20210809115935-a9fd8f5d2767
+# github.com/IBM-Cloud/power-go-client => github.com/yussufsh/power-go-client v1.99.4
+# github.com/softlayer/softlayer-go => github.com/IBM-Cloud/softlayer-go v1.0.3-tf
