@@ -49,7 +49,6 @@ var (
 	HiddenPlatformNames = []string{
 		baremetal.Name,
 		none.Name,
-		powervs.Name,
 	}
 
 	// OKD is a setting to enable community-only modifications
