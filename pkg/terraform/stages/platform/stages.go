@@ -13,6 +13,7 @@ import (
 	"github.com/openshift/installer/pkg/terraform/stages/libvirt"
 	"github.com/openshift/installer/pkg/terraform/stages/openstack"
 	"github.com/openshift/installer/pkg/terraform/stages/ovirt"
+	"github.com/openshift/installer/pkg/terraform/stages/powervs"
 	"github.com/openshift/installer/pkg/terraform/stages/vsphere"
 	alibabacloudtypes "github.com/openshift/installer/pkg/types/alibabacloud"
 	awstypes "github.com/openshift/installer/pkg/types/aws"
@@ -23,6 +24,7 @@ import (
 	libvirttypes "github.com/openshift/installer/pkg/types/libvirt"
 	openstacktypes "github.com/openshift/installer/pkg/types/openstack"
 	ovirttypes "github.com/openshift/installer/pkg/types/ovirt"
+	powervstypes "github.com/openshift/installer/pkg/types/powervs"
 	vspheretypes "github.com/openshift/installer/pkg/types/vsphere"
 )
 
@@ -49,6 +51,8 @@ func StagesForPlatform(platform string) []terraform.Stage {
 		return openstack.PlatformStages
 	case ovirttypes.Name:
 		return ovirt.PlatformStages
+	case powervstypes.Name:
+		return powervs.PlatformStages
 	case vspheretypes.Name:
 		return vsphere.PlatformStages
 	default:
