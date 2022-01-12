@@ -68,6 +68,8 @@ require (
 	github.com/vincent-petithory/dataurl v0.0.0-20191104211930-d1553a71de50
 	github.com/vmware/govmomi v0.24.0
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
+	github.com/zclconf/go-cty v1.8.1
+	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616
 	golang.org/x/net v0.0.0-20210825183410-e898025ed96a
 	golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f
@@ -111,6 +113,59 @@ require (
 	github.com/IBM/go-sdk-core/v4 v4.9.0 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20200907205600-7a23bdc65eef // indirect
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
+	github.com/ChrisTrenkamp/goxpath v0.0.0-20190607011252-c5096ec8773d // indirect
+	github.com/IBM/apigateway-go-sdk v0.0.0-20210714141226-a5d5d49caaca // indirect
+	github.com/IBM/appconfiguration-go-admin-sdk v0.1.0 // indirect
+	github.com/IBM/container-registry-go-sdk v0.0.13 // indirect
+	github.com/IBM/go-sdk-core v1.1.0 // indirect
+	github.com/IBM/go-sdk-core/v3 v3.3.1 // indirect
+	github.com/IBM/go-sdk-core/v4 v4.10.0 // indirect
+	github.com/IBM/ibm-cos-sdk-go v1.7.0 // indirect
+	github.com/IBM/ibm-cos-sdk-go-config v1.2.0 // indirect
+	github.com/IBM/keyprotect-go-client v0.7.0 // indirect
+	github.com/IBM/push-notifications-go-sdk v0.0.0-20210310100607-5790b96c47f5 // indirect
+	github.com/IBM/schematics-go-sdk v0.0.2 // indirect
+	github.com/IBM/secrets-manager-go-sdk v0.1.19 // indirect
+	github.com/MakeNowJust/heredoc v1.0.0 // indirect
+	github.com/Masterminds/goutils v1.1.0 // indirect
+	github.com/Masterminds/semver v1.5.0 // indirect
+	github.com/Masterminds/sprig v2.22.0+incompatible // indirect
+	github.com/Netflix/go-expect v0.0.0-20190729225929-0e00d9168667 // indirect
+	github.com/PaesslerAG/gval v1.0.0 // indirect
+	github.com/PaesslerAG/jsonpath v0.1.1 // indirect
+	github.com/PuerkitoBio/purell v1.1.1 // indirect
+	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
+	github.com/ScaleFT/sshkeys v0.0.0-20200327173127-6142f742bca5 // indirect
+	github.com/Shopify/sarama v1.27.2 // indirect
+	github.com/agext/levenshtein v1.2.3 // indirect
+	github.com/alibabacloud-go/cs-20151215/v2 v2.4.4 // indirect
+	github.com/alibabacloud-go/darabonba-openapi v0.1.5 // indirect
+	github.com/alibabacloud-go/debug v0.0.0-20190504072949-9472017b5c68 // indirect
+	github.com/alibabacloud-go/endpoint-util v1.1.0 // indirect
+	github.com/alibabacloud-go/openapi-util v0.0.7 // indirect
+	github.com/alibabacloud-go/tea v1.1.15 // indirect
+	github.com/alibabacloud-go/tea-roa v1.2.8 // indirect
+	github.com/alibabacloud-go/tea-roa-utils v1.1.5 // indirect
+	github.com/alibabacloud-go/tea-rpc v1.1.8 // indirect
+	github.com/alibabacloud-go/tea-rpc-utils v1.1.2 // indirect
+	github.com/alibabacloud-go/tea-utils v1.3.9 // indirect
+	github.com/aliyun/aliyun-datahub-sdk-go v0.1.5 // indirect
+	github.com/aliyun/aliyun-log-go-sdk v0.1.21 // indirect
+	github.com/aliyun/aliyun-mns-go-sdk v0.0.0-20210305050620-d1b5875bda58 // indirect
+	github.com/aliyun/aliyun-tablestore-go-sdk v4.1.3+incompatible // indirect
+	github.com/aliyun/credentials-go v1.1.2 // indirect
+	github.com/aliyun/fc-go-sdk v0.0.0-20200925033337-c013428cbe21 // indirect
+	github.com/andybalholm/brotli v1.0.1 // indirect
+	github.com/antchfx/xpath v1.1.2 // indirect
+	github.com/apache/openwhisk-client-go v0.0.0-20200201143223-a804fb82d105 // indirect
+	github.com/apparentlymart/go-textseg/v12 v12.0.0 // indirect
+	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
+	github.com/apparentlymart/go-versions v1.0.1 // indirect
+	github.com/armon/circbuf v0.0.0-20190214190532-5111143e8da2 // indirect
+	github.com/armon/go-radix v1.0.0 // indirect
+	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d // indirect
+	github.com/beevik/etree v1.1.0 // indirect
+>>>>>>> 6199ff620... updating vendoring
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.1 // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
@@ -210,7 +265,7 @@ require (
 	sigs.k8s.io/yaml v1.3.0 // indirect
 replace (
 	cloud.google.com/go => cloud.google.com/go v0.57.0
-	github.com/IBM-Cloud/terraform-provider-ibm => github.com/yussufsh/terraform-provider-ibm v1.89.0
+	github.com/IBM-Cloud/terraform-provider-ibm => github.com/openshift/terraform-provider-ibm v1.26.2-openshift-2
 	github.com/go-log/log => github.com/go-log/log v0.1.1-0.20181211034820-a514cf01a3eb // Pinned by MCO
 	github.com/hashicorp/terraform => github.com/openshift/terraform v0.12.20-openshift-4 // Pin to fork with deduplicated rpc types v0.12.20-openshift-4
 	github.com/hashicorp/terraform-plugin-sdk => github.com/openshift/hashicorp-terraform-plugin-sdk v1.14.0-openshift // Pin to fork with public rpc types
@@ -244,6 +299,13 @@ replace (
 	github.com/IBM/vpc-go-sdk => github.com/IBM/vpc-go-sdk v0.8.0
 	github.com/apparentlymart/go-cidr => github.com/apparentlymart/go-cidr v1.0.1
 	github.com/aws/aws-sdk-go => github.com/aws/aws-sdk-go v1.32.3
+	github.com/Azure/go-autorest/autorest => github.com/Azure/go-autorest/autorest v0.11.17
+	github.com/Azure/go-autorest/autorest/adal => github.com/Azure/go-autorest/autorest/adal v0.9.10 // indirect
+	github.com/Azure/go-autorest/autorest/date => github.com/Azure/go-autorest/autorest/date v0.3.0
+	github.com/Azure/go-autorest/autorest/validation => github.com/Azure/go-autorest/autorest/validation v0.3.1
+	github.com/IBM/vpc-go-sdk => github.com/IBM/vpc-go-sdk v0.7.0
+	github.com/apparentlymart/go-cidr => github.com/apparentlymart/go-cidr v1.1.0
+	github.com/aws/aws-sdk-go => github.com/aws/aws-sdk-go v1.35.37
 	github.com/go-openapi/errors => github.com/go-openapi/errors v0.19.2
 	github.com/go-openapi/spec => github.com/go-openapi/spec v0.19.4
 	github.com/go-openapi/validate => github.com/go-openapi/validate v0.19.8
