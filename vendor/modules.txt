@@ -339,7 +339,6 @@ github.com/alibabacloud-go/tea-rpc-utils/service
 github.com/alibabacloud-go/tea-utils/service
 # github.com/aliyun/alibaba-cloud-sdk-go v1.61.1154
 ## explicit
->>>>>>> 160b69041... Import image via COS (#68)
 github.com/aliyun/alibaba-cloud-sdk-go/sdk
 github.com/aliyun/alibaba-cloud-sdk-go/sdk/auth
 github.com/aliyun/alibaba-cloud-sdk-go/sdk/auth/credentials
@@ -467,6 +466,8 @@ github.com/coreos/ignition/v2/config/shared/validations
 github.com/coreos/ignition/v2/config/util
 github.com/coreos/ignition/v2/config/v3_2/types
 # github.com/coreos/stream-metadata-go v0.1.3
+github.com/coreos/ignition/v2/config/validate
+# github.com/coreos/stream-metadata-go v0.1.5-0.20211102155543-ed4342200417
 ## explicit; go 1.15
 github.com/coreos/stream-metadata-go/arch
 github.com/coreos/stream-metadata-go/stream
