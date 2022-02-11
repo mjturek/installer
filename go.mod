@@ -11,7 +11,7 @@ require (
 	github.com/Azure/go-autorest/autorest/azure/auth v0.4.1
 	github.com/Azure/go-autorest/autorest/to v0.4.0
 	github.com/IBM-Cloud/bluemix-go v0.0.0-20210706092416-dc4055f8e0ea
-	github.com/IBM-Cloud/power-go-client v1.0.72
+	github.com/IBM-Cloud/power-go-client v1.1.2
 	github.com/IBM-Cloud/terraform-provider-ibm v1.26.2
 	github.com/IBM/go-sdk-core/v5 v5.5.1
 	github.com/IBM/networking-go-sdk v0.19.0
@@ -376,7 +376,7 @@ require (
 
 replace (
 	cloud.google.com/go => cloud.google.com/go v0.57.0
-	github.com/IBM-Cloud/terraform-provider-ibm => github.com/yussufsh/terraform-provider-ibm v1.89.0
+	github.com/IBM-Cloud/terraform-provider-ibm => github.com/mjturek/terraform-provider-ibm release-1.36.0
 	github.com/go-log/log => github.com/go-log/log v0.1.1-0.20181211034820-a514cf01a3eb // Pinned by MCO
 	github.com/gophercloud/gophercloud => github.com/gophercloud/gophercloud v0.17.0
 	github.com/hashicorp/terraform => github.com/openshift/terraform v0.12.20-openshift-4 // Pin to fork with deduplicated rpc types v0.12.20-openshift-4
@@ -406,7 +406,6 @@ replace (
 // Prevent the following modules from upgrading version as result of terraform-provider-kubernetes module
 // The following modules need to be locked to compile correctly with terraform-provider-azure, terraform-provider-google, and terraform-provider-ibm
 replace (
-	github.com/IBM-Cloud/power-go-client => github.com/yussufsh/power-go-client v1.99.4
 	github.com/IBM/vpc-go-sdk => github.com/IBM/vpc-go-sdk v0.8.0
 	github.com/apparentlymart/go-cidr => github.com/apparentlymart/go-cidr v1.0.1
 	github.com/aws/aws-sdk-go => github.com/aws/aws-sdk-go v1.35.37
