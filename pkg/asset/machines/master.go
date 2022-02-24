@@ -21,8 +21,6 @@ import (
 	ovirtprovider "github.com/openshift/cluster-api-provider-ovirt/pkg/apis/ovirtprovider/v1beta1"
 	powervsapi "github.com/openshift/cluster-api-provider-powervs/pkg/apis"
 	powervsprovider "github.com/openshift/cluster-api-provider-powervs/pkg/apis/powervsprovider/v1alpha1"
-	vsphereapi "github.com/openshift/machine-api-operator/pkg/apis/vsphereprovider"
-	vsphereprovider "github.com/openshift/machine-api-operator/pkg/apis/vsphereprovider/v1beta1"
 	mcfgv1 "github.com/openshift/machine-config-operator/pkg/apis/machineconfiguration.openshift.io/v1"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -569,7 +567,6 @@ func (m *Master) Machines() ([]machinev1beta1.Machine, error) {
 	libvirtapi.AddToScheme(scheme)
 	openstackapi.AddToScheme(scheme)
 	ovirtproviderapi.AddToScheme(scheme)
-	vsphereapi.AddToScheme(scheme)
 	powervsapi.AddToScheme(scheme)
 	scheme.AddKnownTypes(machinev1beta1.SchemeGroupVersion,
 		&machinev1beta1.VSphereMachineProviderSpec{},
