@@ -19,7 +19,7 @@ var endpointTypes = []string{
 	"public", "private", "direct",
 }
 
-func resourcePresign() *schema.Resource {
+func resourceIBMS3Presign() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceIBMCOSBucketObjectPresignCreate,
 		Read:   resourceIBMCOSBucketObjectPresignCreate,
