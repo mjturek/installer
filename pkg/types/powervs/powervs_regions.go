@@ -65,3 +65,35 @@ var Regions = map[string]Region{
 		Zones:       []string{"us-east"},
 	},
 }
+
+// Zones retrieves a slice of all zones in Power VS
+func Zones() []string {
+	var zones []string
+	for _, r := range Regions {
+		zones = append(zones, r.Zones...)
+	}
+	return zones
+}
+
+// ZonesForRegion returns Zones for a given region
+func ZonesForRegion(region string) []string {
+	var zones []string
+	for name, r := range Regions {
+		if name != region {
+			continue
+		}
+		zones = append(zones, r.Zones...)
+	}
+	return zones
+}
+
+// VPCRegionForRegion returns a VPC region name for a given region
+func VPCRegionForRegion(region string) string {
+	var vpcRegion string
+	for name, r := range Regions {
+		if name == region {
+			vpcRegion = r.VPCRegion
+		}
+	}
+	return vpcRegion
+}

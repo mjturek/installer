@@ -22,9 +22,13 @@ type Platform struct {
 	//
 	// +optional
 	VPCRegion string `json:"vpcRegion,omitempty"`
+	VPCZone string `json:"vpcRegion,omitempty"`
 
 	// UserID is the login for the user's IBM Cloud account.
 	UserID string `json:"userID"`
+
+	// APIKey is the API key for the user's IBM Cloud account.
+	APIKey string `json:"APIKey,omitempty"`
 
 	// VPC is a VPC inside IBM Cloud. Needed in order to create VPC Load Balancers.
 	//
