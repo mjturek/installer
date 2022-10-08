@@ -8,12 +8,14 @@ import (
 	"github.com/IBM-Cloud/bluemix-go/crn"
 	"github.com/IBM/go-sdk-core/v4/core"
 	"github.com/IBM/networking-go-sdk/resourcerecordsv1"
+	"github.com/IBM/networking-go-sdk/dnssvcsv1"
 	"github.com/pkg/errors"
 )
 
 const (
 	cisDNSRecordTypeName = "cis dns record"
 	ibmDNSRecordTypeName = "ibm dns record"
+	permittedNetworkTypeName = "permitted network"
 )
 
 // listDNSRecords lists DNS records for the cluster.
@@ -133,6 +135,90 @@ func (o *ClusterUninstaller) listResourceRecords() (cloudResources, error) {
 	return cloudResources{}.insert(result...), nil
 }
 
+// listPermittedNetworks finds networks used by the cluster that are permitted to use the DNS service.
+func (o *ClusterUninstaller) listPermittedNetworks() (cloudResources, error) {
+	o.Logger.Debugf("Listing DNS permitted networks")
+
+	ctx, _ := o.contextWithTimeout()
+
+	select {
+	case <-o.Context.Done():
+		o.Logger.Debugf("listLoadBalancers: case <-o.Context.Done()")
+		return nil, o.Context.Err() // we're cancelled, abort
+	default:
+	}
+
+	result := []cloudResource{}
+
+	dnsCRN, err := crn.Parse(o.DNSInstanceCRN)
+	if err != nil {
+		return nil, errors.Wrap(err, "Failed to parse DNSInstanceCRN")
+	}
+	permittedNetworks, _, err := o.dnsSvc.ListPermittedNetworksWithContext(ctx, &dnssvcsv1.ListPermittedNetworksOptions{
+		InstanceID: &dnsCRN.ServiceInstance,
+		DnszoneID:  &o.dnsZoneID,
+	})
+	for _, permittedNetwork := range permittedNetworks.PermittedNetworks {
+		// Only check permitted networks in the VPC region we are using.
+		vpcCRN, err := crn.Parse(*permittedNetwork.PermittedNetwork.VpcCrn)
+		if err != nil {
+			return nil, errors.Wrap(err, "failed to parse VPC CRN")
+		}
+		if vpcCRN.Region == o.VPCRegion {
+			getVPCOptions := o.vpcSvc.NewGetVPCOptions(*permittedNetwork.ID)
+			vpc, _, err := o.vpcSvc.GetVPCWithContext(ctx, getVPCOptions)
+			if err != nil {
+				return nil, errors.Wrap(err, "failed to get VPC")
+			}
+			// Check if permitted network is for the cluster.
+			nameMatches, _ := regexp.MatchString(o.InfraID, *vpc.Name)
+			if nameMatches || *vpc.Name == o.VPCName {
+				o.Logger.Debugf("listPermittedNetworks: FOUND: %v, %v", *vpc.ID, *vpc.Name)
+				result = append(result, cloudResource{
+					key:      *vpc.ID,
+					name:     *vpc.Name,
+					status:   "",
+					typeName: permittedNetworkTypeName,
+					id:       *vpc.ID,
+				})
+			}
+		}
+	}
+	if err != nil {
+		return nil, errors.Wrap(err, "could not retrieve DNS records")
+	}
+	return cloudResources{}.insert(result...), nil
+}
+
+func (o *ClusterUninstaller) removePermittedNetwork(item cloudResource) error {
+	o.Logger.Debugf("Removing DNS permitted network")
+
+	ctx, _ := o.contextWithTimeout()
+
+	select {
+	case <-o.Context.Done():
+		o.Logger.Debugf("removePermittedNetwork: case <-o.Context.Done()")
+		return o.Context.Err() // we're cancelled, abort
+	default:
+	}
+
+	dnsCRN, err := crn.Parse(o.DNSInstanceCRN)
+	if err != nil {
+		return errors.Wrap(err, "Failed to parse DNSInstanceCRN")
+	}
+
+
+	_, _, err = o.dnsSvc.DeletePermittedNetworkWithContext(ctx, &dnssvcsv1.DeletePermittedNetworkOptions{
+		InstanceID: &dnsCRN.ServiceInstance,
+		PermittedNetworkID: &item.id,
+		DnszoneID:          &o.dnsZoneID,
+	})
+	if err != nil {
+		return errors.Wrap(err, "Failed to remove permitted network")
+	}
+	return nil
+}
+
 func (o *ClusterUninstaller) destroyDNSRecord(item cloudResource) error {
 	var (
 		response *core.DetailedResponse
@@ -143,7 +229,7 @@ func (o *ClusterUninstaller) destroyDNSRecord(item cloudResource) error {
 
 	select {
 	case <-o.Context.Done():
-		o.Logger.Debugf("deleteFloatingIP: case <-o.Context.Done()")
+		o.Logger.Debugf("destroyDNSRecord: case <-o.Context.Done()")
 		return o.Context.Err() // we're cancelled, abort
 	default:
 	}
@@ -226,6 +312,13 @@ func (o *ClusterUninstaller) destroyDNSRecords() error {
 			return err
 		}
 		items = o.insertPendingItems(ibmDNSRecordTypeName, found.list())
+
+		// Find permitted networks on this DNS service used by this cluster.
+		found, err = o.listPermittedNetworks()
+		if err != nil {
+			return err
+		}
+		items = o.insertPendingItems(permittedNetworkTypeName, found.list())
 	}
 
 	ctx, _ := o.contextWithTimeout()
@@ -242,10 +335,16 @@ func (o *ClusterUninstaller) destroyDNSRecords() error {
 			if _, ok := found[item.key]; !ok {
 				// This item has finished deletion.
 				o.deletePendingItems(item.typeName, []cloudResource{item})
-				o.Logger.Infof("Deleted DNS record %q", item.name)
+				o.Logger.Infof("Deleted %s %q", item.typeName, item.name)
 				continue
 			}
-			err = o.destroyDNSRecord(item)
+			switch item.typeName {
+			case cisDNSRecordTypeName, ibmDNSRecordTypeName:
+				err = o.destroyDNSRecord(item)
+			case permittedNetworkTypeName:
+				err = o.removePermittedNetwork(item)
+			}
+
 			if err != nil {
 				o.errorTracker.suppressWarning(item.key, err, o.Logger)
 			}

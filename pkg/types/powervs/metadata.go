@@ -8,6 +8,7 @@ type Metadata struct {
 	PowerVSResourceGroup string `json:"powerVSResourceGroup"`
 	Region               string `json:"region"`
 	VPCRegion            string `json:"vpcRegion"`
+	VPCName              string `json:"vpcName,omitempty"`
 	Zone                 string `json:"zone"`
 	ServiceInstanceGUID  string `json:"serviceInstanceID"`
 }

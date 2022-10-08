@@ -21,6 +21,7 @@ import (
 	"github.com/IBM/networking-go-sdk/dnsrecordsv1"
 	"github.com/IBM/networking-go-sdk/dnszonesv1"
 	"github.com/IBM/networking-go-sdk/resourcerecordsv1"
+	"github.com/IBM/networking-go-sdk/dnssvcsv1"
 	"github.com/IBM/networking-go-sdk/zonesv1"
 	"github.com/IBM/platform-services-go-sdk/resourcecontrollerv2"
 	"github.com/IBM/platform-services-go-sdk/resourcemanagerv2"
@@ -138,6 +139,7 @@ type ClusterUninstaller struct {
 	Region         string
 	ServiceGUID    string
 	VPCRegion      string
+	VPCName        string
 	Zone           string
 
 	managementSvc         *resourcemanagerv2.ResourceManagerV2
@@ -147,6 +149,7 @@ type ClusterUninstaller struct {
 	dnsRecordsSvc         *dnsrecordsv1.DnsRecordsV1
 	dnsZonesSvc           *dnszonesv1.DnsZonesV1
 	resourceRecordsSvc    *resourcerecordsv1.ResourceRecordsV1
+	dnsSvc                *dnssvcsv1.DnsSvcsV1
 	piSession             *ibmpisession.IBMPISession
 	instanceClient        *instance.IBMPIInstanceClient
 	imageClient           *instance.IBMPIImageClient
@@ -211,6 +214,7 @@ func New(logger logrus.FieldLogger, metadata *types.ClusterMetadata) (providers.
 		Region:             metadata.ClusterPlatformMetadata.PowerVS.Region,
 		ServiceGUID:        metadata.ClusterPlatformMetadata.PowerVS.ServiceInstanceGUID,
 		VPCRegion:          metadata.ClusterPlatformMetadata.PowerVS.VPCRegion,
+		VPCName:            metadata.ClusterPlatformMetadata.PowerVS.VPCName,
 		Zone:               metadata.ClusterPlatformMetadata.PowerVS.Zone,
 		pendingItemTracker: newPendingItemTracker(),
 		resourceGroupID:    metadata.ClusterPlatformMetadata.PowerVS.PowerVSResourceGroup,
@@ -793,6 +797,27 @@ func (o *ClusterUninstaller) loadSDKServices() error {
 	if len(o.DNSInstanceCRN) > 0 {
 		err = authenticator.Validate()
 		if err != nil {
+		}
+
+		o.dnsSvc, err = dnssvcsv1.NewDnsSvcsV1(&dnssvcsv1.DnsSvcsV1Options{
+			Authenticator: authenticator,
+		})
+		if err != nil {
+			o.Logger.Debugf("loadSDKServices: bxSession = %v", bxSession)
+			o.Logger.Debugf("loadSDKServices: tokenRefresher = %v", tokenRefresher)
+			o.Logger.Debugf("loadSDKServices: ctrlv2 = %v", ctrlv2)
+			o.Logger.Debugf("loadSDKServices: resourceClientV2 = %v", resourceClientV2)
+			o.Logger.Debugf("loadSDKServices: o.ServiceGUID = %v", o.ServiceGUID)
+			o.Logger.Debugf("loadSDKServices: serviceInstance = %v", serviceInstance)
+			o.Logger.Debugf("loadSDKServices: o.piSession = %v", o.piSession)
+			o.Logger.Debugf("loadSDKServices: o.instanceClient = %v", o.instanceClient)
+			o.Logger.Debugf("loadSDKServices: o.imageClient = %v", o.imageClient)
+			o.Logger.Debugf("loadSDKServices: o.jobClient = %v", o.jobClient)
+			o.Logger.Debugf("loadSDKServices: o.vpcSvc = %v", o.vpcSvc)
+			o.Logger.Debugf("loadSDKServices: o.managementSvc = %v", o.managementSvc)
+			o.Logger.Debugf("loadSDKServices: o.controllerSvc = %v", o.controllerSvc)
+			o.Logger.Debugf("loadSDKServices: o.dnsSvc = %v", o.dnsSvc)
+			return fmt.Errorf("loadSDKServices: loadSDKServices: creating dnsSvc: %v", err)
 		}
 
 		o.dnsZonesSvc, err = dnszonesv1.NewDnsZonesV1(&dnszonesv1.DnsZonesV1Options{

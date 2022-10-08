@@ -21,6 +21,7 @@ func Metadata(config *types.InstallConfig, meta *icpowervs.Metadata) *powervs.Me
 		DNSInstanceCRN:       dnsCRN,
 		Region:               config.Platform.PowerVS.Region,
 		VPCRegion:            config.Platform.PowerVS.VPCRegion,
+		VPCName:              config.Platform.PowerVS.VPCName,
 		Zone:                 config.Platform.PowerVS.Zone,
 		ServiceInstanceGUID:  config.Platform.PowerVS.ServiceInstanceID,
 	}
