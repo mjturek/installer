@@ -30,6 +30,7 @@ type config struct {
 	NetworkName          string `json:"powervs_network_name"`
 	VPCName              string `json:"powervs_vpc_name"`
 	VPCSubnetName        string `json:"powervs_vpc_subnet_name"`
+	VPCPermitted         bool   `json:"powervs_vpc_permitted"`
 	CloudConnectionName  string `json:"powervs_ccon_name"`
 	BootstrapMemory      int32  `json:"powervs_bootstrap_memory"`
 	BootstrapProcessors  string `json:"powervs_bootstrap_processors"`
@@ -57,6 +58,7 @@ type TFVarsSources struct {
 	DNSInstanceCRN       string
 	VPCName              string
 	VPCSubnetName        string
+	VPCPermitted         bool
 	PublishStrategy      types.PublishingStrategy
 	EnableSNAT           bool
 }
@@ -110,6 +112,7 @@ func TFVars(sources TFVarsSources) ([]byte, error) {
 		ImageBucketFileName:  sources.ImageBucketFileName,
 		VPCName:              sources.VPCName,
 		VPCSubnetName:        sources.VPCSubnetName,
+		VPCPermitted:         sources.VPCPermitted,
 		CloudConnectionName:  sources.CloudConnectionName,
 		BootstrapMemory:      masterConfig.MemoryGiB,
 		BootstrapProcessors:  processor,

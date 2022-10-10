@@ -785,12 +785,21 @@ func (t *TerraformVariables) Generate(parents asset.Parents) error {
 		}
 
 		var cisCRN, dnsCRN string
+		vpcPermitted := false
 		switch installConfig.Config.Publish {
 		case types.InternalPublishingStrategy:
 			// Get DNSInstanceCRN from InstallConfig metadata
 			dnsCRN, err = installConfig.PowerVS.DNSInstanceCRN(ctx)
 			if err != nil {
 				return err
+			}
+
+			// If the VPC already exists and the cluster is Private, check if the VPC is already a Permitted Network on DNS Instance
+			if installConfig.Config.PowerVS.VPCName != "" {
+				vpcPermitted, err = installConfig.PowerVS.IsVPCPermittedNetwork(ctx, installConfig.Config.Platform.PowerVS.VPCName, installConfig.Config.BaseDomain)
+				if err != nil {
+					return err
+				}
 			}
 		case types.ExternalPublishingStrategy:
 			// Get CISInstanceCRN from InstallConfig metadata
@@ -826,6 +835,7 @@ func (t *TerraformVariables) Generate(parents asset.Parents) error {
 				NetworkName:          installConfig.Config.PowerVS.PVSNetworkName,
 				VPCName:              installConfig.Config.PowerVS.VPCName,
 				VPCSubnetName:        vpcSubnet,
+				VPCPermitted:         vpcPermitted,
 				CloudConnectionName:  installConfig.Config.PowerVS.CloudConnectionName,
 				CISInstanceCRN:       cisCRN,
 				DNSInstanceCRN:       dnsCRN,

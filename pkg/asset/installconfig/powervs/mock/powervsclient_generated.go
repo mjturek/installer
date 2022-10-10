@@ -9,6 +9,7 @@ import (
 	reflect "reflect"
 
 	iamidentityv1 "github.com/IBM/platform-services-go-sdk/iamidentityv1"
+	vpcv1 "github.com/IBM/vpc-go-sdk/vpcv1"
 	gomock "github.com/golang/mock/gomock"
 	powervs "github.com/openshift/installer/pkg/asset/installconfig/powervs"
 	types "github.com/openshift/installer/pkg/types"
@@ -66,6 +67,21 @@ func (mr *MockAPIMockRecorder) GetAuthenticatorAPIKeyDetails(ctx interface{}) *g
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAuthenticatorAPIKeyDetails", reflect.TypeOf((*MockAPI)(nil).GetAuthenticatorAPIKeyDetails), ctx)
 }
 
+// GetDNSInstancePermittedNetworks mocks base method.
+func (m *MockAPI) GetDNSInstancePermittedNetworks(ctx context.Context, dnsID, dnsZone string) ([]string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetDNSInstancePermittedNetworks", ctx, dnsID, dnsZone)
+	ret0, _ := ret[0].([]string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetDNSInstancePermittedNetworks indicates an expected call of GetDNSInstancePermittedNetworks.
+func (mr *MockAPIMockRecorder) GetDNSInstancePermittedNetworks(ctx, dnsID, dnsZone interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDNSInstancePermittedNetworks", reflect.TypeOf((*MockAPI)(nil).GetDNSInstancePermittedNetworks), ctx, dnsID, dnsZone)
+}
+
 // GetDNSRecordsByName mocks base method.
 func (m *MockAPI) GetDNSRecordsByName(ctx context.Context, crnstr, zoneID, recordName string, publish types.PublishingStrategy) ([]powervs.DNSRecordResponse, error) {
 	m.ctrl.T.Helper()
@@ -109,4 +125,19 @@ func (m *MockAPI) GetDNSZones(ctx context.Context, publish types.PublishingStrat
 func (mr *MockAPIMockRecorder) GetDNSZones(ctx, publish interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDNSZones", reflect.TypeOf((*MockAPI)(nil).GetDNSZones), ctx, publish)
+}
+
+// GetVPCByName mocks base method.
+func (m *MockAPI) GetVPCByName(ctx context.Context, vpcName string) (*vpcv1.VPC, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetVPCByName", ctx, vpcName)
+	ret0, _ := ret[0].(*vpcv1.VPC)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetVPCByName indicates an expected call of GetVPCByName.
+func (mr *MockAPIMockRecorder) GetVPCByName(ctx, vpcName interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetVPCByName", reflect.TypeOf((*MockAPI)(nil).GetVPCByName), ctx, vpcName)
 }

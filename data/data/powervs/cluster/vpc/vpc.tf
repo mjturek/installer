@@ -16,9 +16,10 @@ resource "time_sleep" "wait_for_vpc" {
 }
 
 resource "ibm_is_public_gateway" "dns_vm_gateway" {
-  name = "${var.cluster_id}-gateway"
-  vpc  = data.ibm_is_vpc.ocp_vpc.id
-  zone = data.ibm_is_subnet.ocp_vpc_subnet.zone
+  count = data.ibm_is_subnet.ocp_vpc_subnet.public_gateway == "" ? 1 : 0
+  name  = "${var.cluster_id}-gateway"
+  vpc   = data.ibm_is_vpc.ocp_vpc.id
+  zone  = data.ibm_is_subnet.ocp_vpc_subnet.zone
 }
 
 resource "ibm_is_subnet" "new_vpc_subnet" {
@@ -33,8 +34,9 @@ resource "ibm_is_subnet" "new_vpc_subnet" {
 }
 
 resource "ibm_is_subnet_public_gateway_attachment" "subnet_public_gateway_attachment" {
+  count          = data.ibm_is_subnet.ocp_vpc_subnet.public_gateway == "" ? 1 : 0
   subnet         = data.ibm_is_subnet.ocp_vpc_subnet.id
-  public_gateway = ibm_is_public_gateway.dns_vm_gateway.id
+  public_gateway = ibm_is_public_gateway.dns_vm_gateway[0].id
 }
 
 data "ibm_is_vpc" "ocp_vpc" {
