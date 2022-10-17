@@ -14,6 +14,10 @@ write_files:
   content: |
     SSLProxyEngine on
     ProxyPass / https://s3.direct.${vpc_region}.cloud-object-storage.appdomain.cloud/
+- path: /etc/squid/squid.conf
+  content: |
+    acl SSL_ports port 5000
+  append: true
 %{ endif ~}
 - path: /tmp/named-conf-edit.sed
   permissions: '0640'
