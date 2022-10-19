@@ -40,6 +40,7 @@ module "pi_network" {
   cloud_conn_name   = var.powervs_ccon_name
   vpc_crn           = module.vpc.vpc_crn
   dns_server        = module.dns.dns_server
+  enable_snat       = var.powervs_enable_snat
 }
 
 resource "ibm_pi_key" "cluster_key" {
