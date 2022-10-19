@@ -185,7 +185,7 @@ func New(logger logrus.FieldLogger, metadata *types.ClusterMetadata) (providers.
 	)
 
 	// We need to prompt for missing variables because NewPISession requires them!
-	bxClient, err = powervs.NewBxClient(true)
+	bxClient, err = powervs.NewBxClient(true, true)
 	if err != nil {
 		return nil, err
 	}
