@@ -426,6 +426,7 @@ func (o *ClusterUninstaller) loadSDKServices() error {
 		ctrlv2                controllerv2.ResourceControllerAPIV2
 		resourceClientV2      controllerv2.ResourceServiceInstanceRepository
 		serviceInstance       models.ServiceInstanceV2
+		serviceInstances      cloudResources
 	)
 
 	defer func() {
@@ -487,17 +488,69 @@ func (o *ClusterUninstaller) loadSDKServices() error {
 		return fmt.Errorf("loadSDKServices: ctrlv2.ResourceServiceInstanceV2: %v", err)
 	}
 
-	if o.ServiceGUID == "" {
-		return fmt.Errorf("loadSDKServices: ServiceGUID is empty")
-	}
-	o.Logger.Debugf("loadSDKServices: o.ServiceGUID = %v", o.ServiceGUID)
-
-	serviceInstance, err = resourceClientV2.GetInstance(o.ServiceGUID)
-	if err != nil {
-		return fmt.Errorf("loadSDKServices: resourceClientV2.GetInstance: %v", err)
-	}
 
 	var authenticator core.Authenticator = &core.IamAuthenticator{
+		ApiKey: o.APIKey,
+	}
+
+	err = authenticator.Validate()
+	if err != nil {
+		return errors.Errorf("loadSDKServices: authenticator.Validate failed: %v", err)
+	}
+
+	// Instantiate the service with an API key based IAM authenticator
+	o.managementSvc, err = resourcemanagerv2.NewResourceManagerV2(&resourcemanagerv2.ResourceManagerV2Options{
+		Authenticator: authenticator,
+	})
+	if err != nil {
+		return fmt.Errorf("loadSDKServices: loadSDKServices: creating ResourceManagerV2 Service: %v", err)
+	}
+
+	authenticator = &core.IamAuthenticator{
+		ApiKey: o.APIKey,
+	}
+
+	err = authenticator.Validate()
+	if err != nil {
+		return errors.Errorf("loadSDKServices: authenticator.Validate failed: %v", err)
+	}
+
+	// Instantiate the service with an API key based IAM authenticator
+	o.controllerSvc, err = resourcecontrollerv2.NewResourceControllerV2(&resourcecontrollerv2.ResourceControllerV2Options{
+		Authenticator: authenticator,
+		ServiceName:   "cloud-object-storage",
+		URL:           "https://resource-controller.cloud.ibm.com",
+	})
+	if err != nil {
+		return fmt.Errorf("loadSDKServices: loadSDKServices: creating ControllerV2 Service: %v", err)
+	}
+
+	if o.ServiceGUID == "" {
+		serviceInstances, err = o.listServiceInstances()
+
+		if err != nil {
+			return fmt.Errorf("loadSDKServices: listServiceInstances: %v", err)
+		}
+		numFound := len(serviceInstances.list())
+		if numFound == 0 {
+			return fmt.Errorf("loadSDKServices: listServiceInstances: Service Instance with name containing %v not found", o.InfraID)
+		}
+
+		ServiceCRN, err := crn.Parse(serviceInstances.list()[0].id)
+		if err != nil {
+			return errors.Wrap(err, "Failed to parse Power VS Service Instance CRN")
+		}
+		o.ServiceGUID = ServiceCRN.ServiceInstance
+
+		if numFound > 1 {
+			o.Logger.Warnf("loadSDKServices: listServiceInstances: Found more than one Service Instance with name containing %v. Targetting %v.", o.InfraID, o.ServiceGUID)
+		}
+	}
+
+	o.Logger.Debugf("loadSDKServices: o.ServiceGUID = %v", o.ServiceGUID)
+	serviceInstance, err = resourceClientV2.GetInstance(o.ServiceGUID)
+
+	authenticator = &core.IamAuthenticator{
 		ApiKey: o.APIKey,
 	}
 
@@ -571,41 +624,6 @@ func (o *ClusterUninstaller) loadSDKServices() error {
 
 	userAgentString := fmt.Sprintf("OpenShift/4.x Destroyer/%s", version.Raw)
 	o.vpcSvc.Service.SetUserAgent(userAgentString)
-
-	authenticator = &core.IamAuthenticator{
-		ApiKey: o.APIKey,
-	}
-
-	err = authenticator.Validate()
-	if err != nil {
-	}
-
-	// Instantiate the service with an API key based IAM authenticator
-	o.managementSvc, err = resourcemanagerv2.NewResourceManagerV2(&resourcemanagerv2.ResourceManagerV2Options{
-		Authenticator: authenticator,
-	})
-	if err != nil {
-		return fmt.Errorf("loadSDKServices: loadSDKServices: creating ResourceManagerV2 Service: %v", err)
-	}
-
-	authenticator = &core.IamAuthenticator{
-		ApiKey: o.APIKey,
-	}
-
-	err = authenticator.Validate()
-	if err != nil {
-	}
-
-	// Instantiate the service with an API key based IAM authenticator
-	o.controllerSvc, err = resourcecontrollerv2.NewResourceControllerV2(&resourcecontrollerv2.ResourceControllerV2Options{
-		Authenticator: authenticator,
-		ServiceName:   "cloud-object-storage",
-		URL:           "https://resource-controller.cloud.ibm.com",
-	})
-	if err != nil {
-		return fmt.Errorf("loadSDKServices: loadSDKServices: creating ControllerV2 Service: %v", err)
-	}
-
 	// Either CISInstanceCRN is set or DNSInstanceCRN is set. Both should not be set at the same time,
 	// but check both just to be safe.
 	if len(o.CISInstanceCRN) > 0 {
@@ -615,6 +633,7 @@ func (o *ClusterUninstaller) loadSDKServices() error {
 
 		err = authenticator.Validate()
 		if err != nil {
+			return errors.Errorf("loadSDKServices: authenticator.Validate failed: %v", err)
 		}
 
 		o.zonesSvc, err = zonesv1.NewZonesV1(&zonesv1.ZonesV1Options{
@@ -658,6 +677,7 @@ func (o *ClusterUninstaller) loadSDKServices() error {
 
 		err = authenticator.Validate()
 		if err != nil {
+			return errors.Errorf("loadSDKServices: authenticator.Validate failed: %v", err)
 		}
 
 		o.dnsZonesSvc, err = dnszonesv1.NewDnsZonesV1(&dnszonesv1.DnsZonesV1Options{
