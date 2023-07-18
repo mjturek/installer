@@ -39,6 +39,7 @@ type API interface {
 	GetVPCs(ctx context.Context, region string) ([]vpcv1.VPC, error)
 	ListResourceGroups(ctx context.Context) (*resourcemanagerv2.ResourceGroupList, error)
 	ListServiceInstances(ctx context.Context) ([]string, error)
+	IsServiceInstancePerEnabled(ctx context.Context) (bool, error)
 }
 
 // Client makes calls to the PowerVS API.
@@ -658,4 +659,23 @@ func (c *Client) ListServiceInstances(ctx context.Context) ([]string, error) {
 	}
 
 	return serviceInstances, nil
+}
+
+
+// ListServiceInstances lists all service instances in the cloud.
+func (c *Client) IsServiceInstancePEREnabled(ctx context.Context) (bool, error) {
+	serviceInstance, err := c.GetServiceInstance()
+	if err != nil {
+		return nil, errors.Wrap(err, "Failed to get instance")
+	}
+
+	serviceInstanceCRN, err := crn.Parse(*serviceInstance.ID)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to parse Service Instance CRN")
+	}
+
+	if serviceInstanceCRN.Region == "dal10" {
+		return true, nil
+	}
+	return false, nil
 }

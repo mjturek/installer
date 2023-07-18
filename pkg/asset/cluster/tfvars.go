@@ -780,8 +780,8 @@ func (t *TerraformVariables) Generate(parents asset.Parents) error {
 		}
 
 		var (
-			cisCRN, dnsCRN, vpcGatewayName, vpcSubnet string
-			vpcPermitted, vpcGatewayAttached          bool
+			cisCRN, dnsCRN, vpcGatewayName, vpcSubnet    string
+			vpcPermitted, vpcGatewayAttached, perEnabled bool
 		)
 		if len(installConfig.Config.PowerVS.VPCSubnets) > 0 {
 			vpcSubnet = installConfig.Config.PowerVS.VPCSubnets[0]
@@ -859,7 +859,7 @@ func (t *TerraformVariables) Generate(parents asset.Parents) error {
 			rand.Seed(time.Now().UnixNano())
 			vpcZone = fmt.Sprintf("%s-%d", vpcRegion, rand.Intn(2)+1) //nolint:gosec // we don't need a crypto secure number
 		}
-
+		perEnabled, err = client.IsServiceInstancePEREnabled(installConfig.Config.Platform.PowerVS.ServiceInstanceID)
 		osImage := strings.SplitN(string(*rhcosImage), "/", 2)
 		data, err = powervstfvars.TFVars(
 			powervstfvars.TFVarsSources{
@@ -884,6 +884,7 @@ func (t *TerraformVariables) Generate(parents asset.Parents) error {
 				DNSInstanceCRN:       dnsCRN,
 				PublishStrategy:      installConfig.Config.Publish,
 				EnableSNAT:           len(installConfig.Config.DeprecatedImageContentSources) == 0 && len(installConfig.Config.ImageDigestSources) == 0,
+				PEREnabled:           perEnabled,
 			},
 		)
 		if err != nil {
