@@ -39,7 +39,8 @@ type config struct {
 	SysType               string `json:"powervs_sys_type"`
 	PublishStrategy       string `json:"powervs_publish_strategy"`
 	EnableSNAT            bool   `json:"powervs_enable_snat"`
-	TransitGatewayEnabled bool   `json:"powervs_transit_gateway_enabled"`
+	AttachedTransitGateway string `json:"powervs_attached_transit_gateway"`
+	TGConnectionVPCID      string `json:"powervs_tg_connection_vpc_id"`
 	ServiceInstanceName   string `json:"powervs_service_instance_name"`
 }
 
@@ -64,7 +65,8 @@ type TFVarsSources struct {
 	VPCGatewayAttached    bool
 	PublishStrategy       types.PublishingStrategy
 	EnableSNAT            bool
-	TransitGatewayEnabled bool
+	AttachedTransitGateway string
+	TGConnectionVPCID      string
 	ServiceInstanceName   string
 }
 
@@ -120,7 +122,8 @@ func TFVars(sources TFVarsSources) ([]byte, error) {
 		SysType:               masterConfig.SystemType,
 		PublishStrategy:       string(sources.PublishStrategy),
 		EnableSNAT:            sources.EnableSNAT,
-		TransitGatewayEnabled: sources.TransitGatewayEnabled,
+		AttachedTransitGateway: sources.AttachedTransitGateway,
+		TGConnectionVPCID:      sources.TGConnectionVPCID,
 		ServiceInstanceName:   sources.ServiceInstanceName,
 	}
 

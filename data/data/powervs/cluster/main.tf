@@ -42,7 +42,6 @@ module "pi_network" {
   vpc_crn                 = module.vpc.vpc_crn
   dns_server              = module.dns.dns_server
   enable_snat             = var.powervs_enable_snat
-  transit_gateway_enabled = var.powervs_transit_gateway_enabled
 }
 
 resource "ibm_pi_key" "cluster_key" {
@@ -151,7 +150,8 @@ module "transit_gateway" {
   cluster_id              = var.cluster_id
   resource_group          = var.powervs_resource_group
   service_instance_crn    = module.iaas.si_crn
-  transit_gateway_enabled = var.powervs_transit_gateway_enabled
+  attached_transit_gateway = var.powervs_attached_transit_gateway
+  tg_connection_vpc_id    = var.powervs_tg_connection_vpc_id
   vpc_crn                 = module.vpc.vpc_crn
   vpc_region              = var.powervs_vpc_region
 }

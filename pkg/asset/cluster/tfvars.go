@@ -869,8 +869,8 @@ func (t *TerraformVariables) Generate(parents asset.Parents) error {
 			vpcRegion, vpcZone string
 		)
 		vpcName := installConfig.Config.PowerVS.VPCName
+		var vpc *vpcv1.VPC
 		if vpcName != "" {
-			var vpc *vpcv1.VPC
 			vpc, err = client.GetVPCByName(ctx, vpcName)
 			if err != nil {
 				return err
@@ -889,6 +889,7 @@ func (t *TerraformVariables) Generate(parents asset.Parents) error {
 				return err
 			}
 		}
+
 		if vpcSubnet != "" {
 			var sn *vpcv1.Subnet
 			sn, err = client.GetSubnetByName(ctx, vpcSubnet, vpcRegion)
@@ -912,7 +913,20 @@ func (t *TerraformVariables) Generate(parents asset.Parents) error {
 			}
 		}
 
-		transitGatewayEnabled := powervsconfig.TransitGatewayEnabledZone(installConfig.Config.Platform.PowerVS.Zone)
+		attachedTG := ""
+		tgConnectionVPCID := ""
+		if installConfig.Config.PowerVS.ServiceInstanceGUID != "" {
+			attachedTG, err = client.GetAttachedTransitGateway(ctx, installConfig.Config.PowerVS.ServiceInstanceGUID)
+			if err != nil {
+				return err
+			}
+			if vpcSubnet != "" {
+				tgConnectionVPCID, err = client.GetTGConnectionVPC(ctx, attachedTG, *vpc.ID)
+				if err != nil {
+					return err
+				}
+			}
+		}
 
 		// If a service instance GUID was passed in the install-config.yaml file, then
 		// find the corresponding name for it.  Otherwise, we expect our Terraform to
@@ -944,7 +958,8 @@ func (t *TerraformVariables) Generate(parents asset.Parents) error {
 				DNSInstanceCRN:        dnsCRN,
 				PublishStrategy:       installConfig.Config.Publish,
 				EnableSNAT:            len(installConfig.Config.DeprecatedImageContentSources) == 0 && len(installConfig.Config.ImageDigestSources) == 0,
-				TransitGatewayEnabled: transitGatewayEnabled,
+				AttachedTransitGateway: attachedTG,
+				TGConnectionVPCID:      tgConnectionVPCID,
 				ServiceInstanceName:   serviceInstanceName,
 			},
 		)
