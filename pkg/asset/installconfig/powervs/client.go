@@ -664,7 +664,7 @@ func (c *Client) ListServiceInstances(ctx context.Context) ([]string, error) {
 // TransitGatewayEnabledZone returns if a zone is configured for transit gateways rather than cloud connections.
 func TransitGatewayEnabledZone(zone string) bool {
 	// @TBD - HACK.  Waiting for officially supported detection function
-	return zone == "dal10"
+	return zone == "dal10" || zone == "mad02"
 }
 
 // ServiceInstanceIDToCRN returns the CRN of the matching service instance GUID which was passed in.

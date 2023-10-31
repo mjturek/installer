@@ -22,6 +22,11 @@ var Regions = map[string]Region{
 		VPCRegion:   "us-south",
 		Zones:       []string{"dal10"},
 	},
+	"mad": {
+		Description: "Madrid, Spain",
+		VPCRegion:   "eu-es",
+		Zones:       []string{"mad02"},
+	},
 	"mon": {
 		Description: "Montreal, Canada",
 		VPCRegion:   "ca-tor",
