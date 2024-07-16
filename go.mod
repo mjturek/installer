@@ -123,7 +123,7 @@ require (
 	sigs.k8s.io/cluster-api-provider-aws/v2 v2.5.2-0.20240716201506-6e43273dd65d
 	sigs.k8s.io/cluster-api-provider-azure v1.15.1-0.20240617212811-a52056dfb88c
 	sigs.k8s.io/cluster-api-provider-gcp v1.7.0
-	sigs.k8s.io/cluster-api-provider-ibmcloud v0.7.0
+	sigs.k8s.io/cluster-api-provider-ibmcloud v0.9.0-alpha.0.0.20240715122709-5b0105778f2a
 	sigs.k8s.io/cluster-api-provider-openstack v0.10.3
 	sigs.k8s.io/cluster-api-provider-vsphere v1.9.3
 	sigs.k8s.io/controller-runtime v0.18.3
