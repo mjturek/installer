@@ -15,9 +15,12 @@ type Region struct {
 	Description string
 	VPCRegion   string
 	COSRegion   string
-	Zones       []string
-	SysTypes    []string
+	Zones       map[string]Zone
 	VPCZones    []string
+}
+
+type Zone struct {
+	SysTypes []string
 }
 
 // Regions holds the regions for IBM Power VS, and descriptions used during the survey.
@@ -26,64 +29,103 @@ var Regions = map[string]Region{
 		Description: "Dallas, USA",
 		VPCRegion:   "us-south",
 		COSRegion:   "us-south",
-		Zones:       []string{"dal10", "dal12"},
-		SysTypes:    []string{"s922", "e980"},
+		Zones: map[string]Zone{
+			"dal10": {
+				SysTypes: []string{"s922", "s1022", "e980", "e1080"},
+			},
+			"dal12": {
+				SysTypes: []string{"s922", "e980"},
+			},
+		},
 		VPCZones:    []string{"us-south-1", "us-south-2", "us-south-3"},
 	},
 	"eu-de": {
 		Description: "Frankfurt, Germany",
 		VPCRegion:   "eu-de",
 		COSRegion:   "eu-de",
-		Zones:       []string{"eu-de-1", "eu-de-2"},
-		SysTypes:    []string{"s922", "e980"},
-		VPCZones:    []string{"eu-de-2", "eu-de-3"},
+		Zones: map[string]Zone{
+			"eu-de-1": {
+				SysTypes: []string{"s922", "s1022", "e980"},
+			},
+			"eu-de-2": {
+				SysTypes: []string{"s922", "e980"},
+			},
+		},
+		VPCZones:    []string{"eu-de-1", "eu-de-2", "eu-de-3"},
 	},
 	"lon": {
 		Description: "London, UK",
 		VPCRegion:   "eu-gb",
 		COSRegion:   "eu-gb",
-		Zones:       []string{"lon06"},
-		SysTypes:    []string{"s922", "e980"},
+		Zones: map[string]Zone{
+			"lon06": {
+				SysTypes: []string{"s922", "e980"},
+			},
+		},
 		VPCZones:    []string{"eu-gb-1", "eu-gb-2", "eu-gb-3"},
 	},
 	"mad": {
 		Description: "Madrid, Spain",
 		VPCRegion:   "eu-es",
 		COSRegion:   "eu-de", // @HACK - PowerVS says COS not supported in this region
-		Zones:       []string{"mad02", "mad04"},
-		SysTypes:    []string{"e980", "s1022"},
+		Zones: map[string]Zone{
+			"mad02": {
+				SysTypes: []string{"s922", "s1022", "e980"},
+			},
+			"mad04": {
+				SysTypes: []string{"s1022", "e980", "e1080"},
+			},
+		},
 		VPCZones:    []string{"eu-es-1", "eu-es-2"},
 	},
 	"osa": {
 		Description: "Osaka, Japan",
 		VPCRegion:   "jp-osa",
 		COSRegion:   "jp-osa",
-		Zones:       []string{"osa21"},
-		SysTypes:    []string{"s922", "e980"},
+		Zones: map[string]Zone{
+			"osa21": {
+				SysTypes: []string{"s922", "s1022", "e980"},
+			},
+		},
 		VPCZones:    []string{"jp-osa-1", "jp-osa-2", "jp-osa-3"},
 	},
 	"sao": {
 		Description: "São Paulo, Brazil",
 		VPCRegion:   "br-sao",
 		COSRegion:   "br-sao",
-		Zones:       []string{"sao01", "sao04"},
-		SysTypes:    []string{"s922", "e980"},
+		Zones: map[string]Zone{
+			"sao01": {
+				SysTypes: []string{"s922", "e980"},
+			},
+			"sao04": {
+				SysTypes: []string{"s922", "e980"},
+			},
+		},
 		VPCZones:    []string{"br-sao-1", "br-sao-2", "br-sao-3"},
 	},
 	"syd": {
 		Description: "Sydney, Australia",
 		VPCRegion:   "au-syd",
 		COSRegion:   "au-syd",
-		Zones:       []string{"syd04"},
-		SysTypes:    []string{"s922", "e980"},
+		Zones: map[string]Zone{
+			"syd04": {
+				SysTypes: []string{"s922", "e980"},
+			},
+		},
 		VPCZones:    []string{"au-syd-1", "au-syd-2", "au-syd-3"},
 	},
 	"wdc": {
 		Description: "Washington DC, USA",
 		VPCRegion:   "us-east",
 		COSRegion:   "us-east",
-		Zones:       []string{"wdc06", "wdc07"},
-		SysTypes:    []string{"s922", "e980"},
+		Zones: map[string]Zone{
+			"wdc06": {
+				SysTypes: []string{"s922", "e980"},
+			},
+			"wdc07": {
+				SysTypes: []string{"s922", "s1022", "e980", "e1080"},
+			},
+		},
 		VPCZones:    []string{"us-east-1", "us-east-2", "us-east-3"},
 	},
 }
