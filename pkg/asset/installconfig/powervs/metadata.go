@@ -366,29 +366,45 @@ func (m *Metadata) GetDNSServerIP(ctx context.Context, vpcName string) (string, 
 		if err != nil {
 			return "", err
 		}
-		// Wait for the custom resolver to be enabled.
+		
+		// Wait for the DNS server IP to be populated
 		backoff := wait.Backoff{
 			Duration: 15 * time.Second,
 			Factor:   1.1,
 			Cap:      leftInContext(ctx),
-			Steps:    math.MaxInt32}
-
-		customResolverID := *customResolver.ID
+			Steps:    math.MaxInt32,
+		}
+		
 		var lastErr error
 		err = wait.ExponentialBackoffWithContext(ctx, backoff, func(context.Context) (bool, error) {
-			customResolver, lastErr = client.EnableDNSCustomResolver(ctx, dnsCRN.ServiceInstance, customResolverID)
-			if lastErr == nil {
+			// Check if the first location has a DNS server IP
+			if len(customResolver.Locations) > 0 && customResolver.Locations[0].DnsServerIp != nil && *customResolver.Locations[0].DnsServerIp != "" {
+				dnsServerIP = *customResolver.Locations[0].DnsServerIp
 				return true, nil
 			}
+			
+			// Re-fetch the custom resolver to check if DNS server IP is now available
+			customResolver, lastErr = client.GetDNSCustomResolverByID(ctx, dnsCRN.ServiceInstance, *customResolver.ID)
+			if lastErr != nil {
+				return false, nil
+			}
+			
+			if len(customResolver.Locations) > 0 && customResolver.Locations[0].DnsServerIp != nil && *customResolver.Locations[0].DnsServerIp != "" {
+				dnsServerIP = *customResolver.Locations[0].DnsServerIp
+				return true, nil
+			}
+			
 			return false, nil
 		})
+		
 		if err != nil {
 			if lastErr != nil {
 				err = lastErr
 			}
-			return "", fmt.Errorf("failed to enable custom resolver %s: %w", *customResolver.ID, err)
+			return "", fmt.Errorf("failed to get DNS server IP for custom resolver %s: %w", *customResolver.ID, err)
 		}
-		dnsServerIP = *customResolver.Locations[0].DnsServerIp
+		
+		// Note: The custom resolver will be enabled in the PostProvision stage
 	}
 	return dnsServerIP, nil
 }

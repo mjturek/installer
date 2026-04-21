@@ -41,6 +41,8 @@ type API interface {
 	GetDNSZones(ctx context.Context, publish types.PublishingStrategy) ([]DNSZoneResponse, error)
 	GetDNSInstancePermittedNetworks(ctx context.Context, dnsID string, dnsZone string) ([]string, error)
 	GetDNSCustomResolverIP(ctx context.Context, dnsID string, vpcID string) (string, error)
+	GetDNSCustomResolverID(ctx context.Context, dnsID string, vpcID string) (string, error)
+	GetDNSCustomResolverByID(ctx context.Context, dnsID string, resolverID string) (*dnssvcsv1.CustomResolver, error)
 	CreateDNSCustomResolver(ctx context.Context, name string, dnsID string, vpcID string) (*dnssvcsv1.CustomResolver, error)
 	EnableDNSCustomResolver(ctx context.Context, dnsID string, resolverID string) (*dnssvcsv1.CustomResolver, error)
 	CreateDNSRecord(ctx context.Context, publish types.PublishingStrategy, crnstr string, baseDomain string, hostname string, cname string) error
@@ -303,6 +305,41 @@ func (c *Client) GetDNSCustomResolverIP(ctx context.Context, dnsID string, vpcID
 		}
 	}
 	return "", fmt.Errorf("DNS server IP of custom resolver for %q not found", dnsID)
+}
+
+// GetDNSCustomResolverID gets the ID of a custom resolver associated with the specified VPC in the specified DNS zone.
+func (c *Client) GetDNSCustomResolverID(ctx context.Context, dnsID string, vpcID string) (string, error) {
+	listCustomResolversOptions := c.dnsServicesAPI.NewListCustomResolversOptions(dnsID)
+	customResolvers, _, err := c.dnsServicesAPI.ListCustomResolversWithContext(ctx, listCustomResolversOptions)
+	if err != nil {
+		return "", err
+	}
+
+	subnets, err := c.GetVPCSubnets(ctx, vpcID)
+	if err != nil {
+		return "", err
+	}
+
+	for _, customResolver := range customResolvers.CustomResolvers {
+		for _, location := range customResolver.Locations {
+			for _, subnet := range subnets {
+				if *subnet.CRN == *location.SubnetCrn {
+					return *customResolver.ID, nil
+				}
+			}
+		}
+	}
+	return "", fmt.Errorf("custom resolver that has VPC %q permitted not found in DNS zone %q", dnsID, vpcID)
+}
+
+// GetDNSCustomResolverByID gets a custom resolver by its ID.
+func (c *Client) GetDNSCustomResolverByID(ctx context.Context, dnsID string, resolverID string) (*dnssvcsv1.CustomResolver, error) {
+	getCustomResolverOptions := c.dnsServicesAPI.NewGetCustomResolverOptions(dnsID, resolverID)
+	customResolver, _, err := c.dnsServicesAPI.GetCustomResolverWithContext(ctx, getCustomResolverOptions)
+	if err != nil {
+		return nil, err
+	}
+	return customResolver, nil
 }
 
 // CreateDNSCustomResolver creates a custom resolver associated with the specified VPC in the specified DNS zone.

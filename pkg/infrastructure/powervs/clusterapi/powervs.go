@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"time"
 
+	"github.com/IBM-Cloud/bluemix-go/crn"
 	"github.com/IBM/vpc-go-sdk/vpcv1"
 	"github.com/sirupsen/logrus"
 	corev1 "k8s.io/api/core/v1"
@@ -429,6 +430,61 @@ func (p Provider) PostProvision(ctx context.Context, in clusterapi.PostProvision
 	}
 
 	// Step 3.
+	// Enable the DNS custom resolver if using Internal publishing strategy
+	if in.InstallConfig.Config.Publish == types.InternalPublishingStrategy {
+		vpcName := in.InstallConfig.Config.Platform.PowerVS.VPC
+		if vpcName == "" {
+			return fmt.Errorf("VPC name is required for Internal publishing strategy")
+		}
+
+		// Get the VPC to find the custom resolver
+		vpc, err := client.GetVPCByName(ctx, vpcName)
+		if err != nil {
+			return fmt.Errorf("failed to get VPC %s in PostProvision: %w", vpcName, err)
+		}
+
+		// Get the DNS instance CRN
+		dnsInstanceCRN, err := in.InstallConfig.PowerVS.DNSInstanceCRN(ctx)
+		if err != nil {
+			return fmt.Errorf("unable to locate DNS instance in PostProvision: %w", err)
+		}
+		dnsCRN, err := crn.Parse(dnsInstanceCRN)
+		if err != nil {
+			return fmt.Errorf("failed to parse DNSInstanceCRN in PostProvision: %w", err)
+		}
+
+		// Get the custom resolver ID
+		customResolverID, err := client.GetDNSCustomResolverID(ctx, dnsCRN.ServiceInstance, *vpc.ID)
+		if err != nil {
+			return fmt.Errorf("failed to get DNS custom resolver ID in PostProvision: %w", err)
+		}
+
+		// Enable the custom resolver with retry logic
+		logrus.Infof("Enabling DNS custom resolver %s", customResolverID)
+		backoff := wait.Backoff{
+			Duration: 15 * time.Second,
+			Factor:   1.1,
+			Cap:      leftInContext(ctx),
+			Steps:    math.MaxInt32,
+		}
+		var lastErr error
+		err = wait.ExponentialBackoffWithContext(ctx, backoff, func(context.Context) (bool, error) {
+			_, lastErr = client.EnableDNSCustomResolver(ctx, dnsCRN.ServiceInstance, customResolverID)
+			if lastErr == nil {
+				return true, nil
+			}
+			return false, nil
+		})
+		if err != nil {
+			if lastErr != nil {
+				err = lastErr
+			}
+			return fmt.Errorf("failed to enable custom resolver %s in PostProvision: %w", customResolverID, err)
+		}
+		logrus.Infof("Successfully enabled DNS custom resolver %s", customResolverID)
+	}
+
+	// Step 4.
 	// @TODO Remove once https://github.com/kubernetes-sigs/cluster-api-provider-ibmcloud/issues/1679 is fixed
 	// Add the bootstrap's IP address to the load balancer pool
 	// Get the cluster from the provider so we can have what load balancers are attached
