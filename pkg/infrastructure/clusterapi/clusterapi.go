@@ -19,6 +19,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/utils/ptr"
 	clusterv1 "sigs.k8s.io/cluster-api/api/core/v1beta1" //nolint:staticcheck //CORS-3563
+	clusterv1beta2 "sigs.k8s.io/cluster-api/api/core/v1beta2"
 	"sigs.k8s.io/cluster-api/util"
 	utilkubeconfig "sigs.k8s.io/cluster-api/util/kubeconfig"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -318,7 +319,7 @@ func (i *InfraProvider) Provision(ctx context.Context, dir string, parents asset
 	// Create the machine manifests.
 	timer.StartTimer(machineStage)
 	machineNames := []string{}
-	capiMachines := []*clusterv1.Machine{}
+	capiMachines := []client.Object{}
 
 	for _, m := range machineManifests {
 		m.SetNamespace(capiutils.Namespace)
@@ -327,9 +328,10 @@ func (i *InfraProvider) Provision(ctx context.Context, dir string, parents asset
 		}
 		i.appliedManifests = append(i.appliedManifests, m)
 
-		if machine, ok := m.(*clusterv1.Machine); ok {
-			machineNames = append(machineNames, machine.Name)
-			capiMachines = append(capiMachines, machine)
+		switch m.(type) {
+		case *clusterv1.Machine, *clusterv1beta2.Machine:
+			machineNames = append(machineNames, m.GetName())
+			capiMachines = append(capiMachines, m)
 		}
 		logrus.Infof("Created manifest %+T, namespace=%s name=%s", m, m.GetNamespace(), m.GetName())
 	}
@@ -350,7 +352,7 @@ func (i *InfraProvider) Provision(ctx context.Context, dir string, parents asset
 				allReady := true
 				for _, machine := range capiMachines {
 					if err := cl.Get(ctx, client.ObjectKey{
-						Name:      machine.Name,
+						Name:      machine.GetName(),
 						Namespace: capiutils.Namespace,
 					}, machine); err != nil {
 						if apierrors.IsNotFound(err) {
@@ -360,7 +362,7 @@ func (i *InfraProvider) Provision(ctx context.Context, dir string, parents asset
 						return false, err
 					}
 
-					reqPubIP := reqBootstrapPubIP && machine.Name == capiutils.GenerateBoostrapMachineName(clusterID.InfraID)
+					reqPubIP := reqBootstrapPubIP && machine.GetName() == capiutils.GenerateBoostrapMachineName(clusterID.InfraID)
 					ready, err := checkMachineReady(machine, reqPubIP)
 					if err != nil {
 						return false, fmt.Errorf("failed waiting for machines: %w", err)
@@ -368,7 +370,7 @@ func (i *InfraProvider) Provision(ctx context.Context, dir string, parents asset
 					if !ready {
 						allReady = false
 					} else {
-						logrus.Debugf("Machine %s is ready. Phase: %s", machine.Name, machine.Status.Phase)
+						logrus.Debugf("Machine %s is ready. Phase: %s", machine.GetName(), machinePhase(machine))
 					}
 				}
 				return allReady, nil
@@ -376,7 +378,7 @@ func (i *InfraProvider) Provision(ctx context.Context, dir string, parents asset
 			// Attempt to find and report falsy conditions in infra machines if any.
 			for _, machine := range capiMachines {
 				if machine != nil {
-					warnIfFalsyInfraConditions(ctx, &machine.Spec.InfrastructureRef, cl)
+					warnIfFalsyInfraConditions(ctx, machineInfraRef(machine), cl)
 				}
 			}
 			if wait.Interrupted(err) {
@@ -642,22 +644,83 @@ func (i *InfraProvider) collectManifests(ctx context.Context, cl client.Client) 
 	return fileList, errorList
 }
 
-func checkMachineReady(machine *clusterv1.Machine, requirePublicIP bool) (bool, error) {
-	logrus.Debugf("Checking that machine %s has provisioned...", machine.Name)
-	if machine.Status.Phase != string(clusterv1.MachinePhaseProvisioned) &&
-		machine.Status.Phase != string(clusterv1.MachinePhaseRunning) {
-		logrus.Debugf("Machine %s has not yet provisioned: %s", machine.Name, machine.Status.Phase)
-		return false, nil
-	} else if machine.Status.Phase == string(clusterv1.MachinePhaseFailed) {
-		//TODO: We need to update this to use non deprecated field
-		msg := ptr.Deref(machine.Status.FailureMessage, "machine.Status.FailureMessage was not set") //nolint:staticcheck
-		return false, fmt.Errorf("machine %s failed to provision: %s", machine.Name, msg)
+func machinePhase(machine client.Object) string {
+	switch m := machine.(type) {
+	case *clusterv1.Machine:
+		return m.Status.Phase
+	case *clusterv1beta2.Machine:
+		return m.Status.Phase
+	default:
+		return ""
 	}
-	logrus.Debugf("Machine %s has status: %s", machine.Name, machine.Status.Phase)
-	return hasRequiredIP(machine, requirePublicIP), nil
 }
 
-func hasRequiredIP(machine *clusterv1.Machine, requirePublicIP bool) bool {
+func machineInfraRef(machine client.Object) *corev1.ObjectReference {
+	switch m := machine.(type) {
+	case *clusterv1.Machine:
+		return &m.Spec.InfrastructureRef
+	case *clusterv1beta2.Machine:
+		return &corev1.ObjectReference{
+			APIVersion: m.Spec.InfrastructureRef.APIGroup,
+			Kind:       m.Spec.InfrastructureRef.Kind,
+			Name:       m.Spec.InfrastructureRef.Name,
+			Namespace:  m.GetNamespace(),
+		}
+	default:
+		return nil
+	}
+}
+
+func checkMachineReady(machine client.Object, requirePublicIP bool) (bool, error) {
+	logrus.Debugf("Checking that machine %s has provisioned...", machine.GetName())
+	switch m := machine.(type) {
+	case *clusterv1.Machine:
+		if m.Status.Phase == string(clusterv1.MachinePhaseFailed) {
+			msg := ptr.Deref(m.Status.FailureMessage, "machine.Status.FailureMessage was not set") //nolint:staticcheck
+			return false, fmt.Errorf("machine %s failed to provision: %s", m.Name, msg)
+		}
+		if m.Status.Phase != string(clusterv1.MachinePhaseProvisioned) &&
+			m.Status.Phase != string(clusterv1.MachinePhaseRunning) {
+			logrus.Debugf("Machine %s has not yet provisioned: %s", m.Name, m.Status.Phase)
+			return false, nil
+		}
+		logrus.Debugf("Machine %s has status: %s", m.Name, m.Status.Phase)
+		return hasRequiredIPV1Beta1(m, requirePublicIP), nil
+
+	case *clusterv1beta2.Machine:
+		if m.Status.Phase == string(clusterv1beta2.MachinePhaseFailed) {
+			msg := extractV1Beta2Failure(m)
+			return false, fmt.Errorf("machine %s failed to provision: %s", m.Name, msg)
+		}
+		if m.Status.Phase != string(clusterv1beta2.MachinePhaseProvisioned) &&
+			m.Status.Phase != string(clusterv1beta2.MachinePhaseRunning) {
+			logrus.Debugf("Machine %s has not yet provisioned: %s", m.Name, m.Status.Phase)
+			return false, nil
+		}
+		logrus.Debugf("Machine %s has status: %s", m.Name, m.Status.Phase)
+		return hasRequiredIPV1Beta2(m, requirePublicIP), nil
+
+	default:
+		return false, fmt.Errorf("unsupported machine type %T", machine)
+	}
+}
+
+func extractV1Beta2Failure(m *clusterv1beta2.Machine) string {
+	if m.Status.Deprecated != nil && m.Status.Deprecated.V1Beta1 != nil && m.Status.Deprecated.V1Beta1.FailureMessage != nil {
+		return *m.Status.Deprecated.V1Beta1.FailureMessage
+	}
+	if m.Status.Deprecated != nil && m.Status.Deprecated.V1Beta1 != nil && m.Status.Deprecated.V1Beta1.FailureReason != nil {
+		return string(*m.Status.Deprecated.V1Beta1.FailureReason)
+	}
+	for _, c := range m.Status.Conditions {
+		if c.Status != metav1.ConditionTrue && c.Message != "" {
+			return c.Message
+		}
+	}
+	return "machine.Status.FailureMessage was not set"
+}
+
+func hasRequiredIPV1Beta1(machine *clusterv1.Machine, requirePublicIP bool) bool {
 	logrus.Debugf("Checking that IP addresses are populated in the status of machine %s...", machine.Name)
 
 	for _, addr := range machine.Status.Addresses {
@@ -677,11 +740,41 @@ func hasRequiredIP(machine *clusterv1.Machine, requirePublicIP bool) bool {
 	return false
 }
 
+func hasRequiredIPV1Beta2(machine *clusterv1beta2.Machine, requirePublicIP bool) bool {
+	logrus.Debugf("Checking that IP addresses are populated in the status of machine %s...", machine.Name)
+
+	for _, addr := range machine.Status.Addresses {
+		switch {
+		case len(addr.Address) == 0:
+			continue
+		case addr.Type == clusterv1beta2.MachineAddressType(corev1.NodeExternalIP):
+			logrus.Debugf("Found external IP address: %s", addr.Address)
+			return true
+		case addr.Type == clusterv1beta2.MachineAddressType(corev1.NodeInternalIP) && !requirePublicIP:
+			logrus.Debugf("Found internal IP address: %s", addr.Address)
+			return true
+		}
+		logrus.Debugf("Checked IP %s: %s", addr.Type, addr.Address)
+	}
+	logrus.Debugf("Still waiting for machine %s to get required IPs", machine.Name)
+	return false
+}
+
+type conditionInfo struct {
+	Type    string `json:"type"`
+	Status  string `json:"status"`
+	Reason  string `json:"reason,omitempty"`
+	Message string `json:"message,omitempty"`
+}
+
 // gatherInfraConditions gather conditions from CAPI infra cluster or machine
 // in a provider-agnostic way from the "status.condition" field, which should be present in all providers.
 // https://cluster-api.sigs.k8s.io/developer/providers/contracts/infra-cluster#infracluster-conditions
 // https://cluster-api.sigs.k8s.io/developer/providers/contracts/infra-machine#inframachine-conditions
-func gatherInfraConditions(ctx context.Context, objRef *corev1.ObjectReference, cl client.Client) (clusterv1.Conditions, error) {
+func gatherInfraConditions(ctx context.Context, objRef *corev1.ObjectReference, cl client.Client) ([]conditionInfo, error) {
+	if objRef == nil {
+		return nil, errors.New("nil object reference")
+	}
 	unstructuredObj := &unstructured.Unstructured{}
 	unstructuredObj.SetGroupVersionKind(objRef.GroupVersionKind())
 
@@ -692,11 +785,9 @@ func gatherInfraConditions(ctx context.Context, objRef *corev1.ObjectReference, 
 		return nil, err
 	}
 
-	// Field .status.conditions should be implemented by all providers
-	// and has type clusterv1.Conditions
 	infraObj := &struct {
 		Status struct {
-			Conditions clusterv1.Conditions `json:"conditions,omitempty"`
+			Conditions []conditionInfo `json:"conditions,omitempty"`
 		} `json:"status,omitempty"`
 	}{}
 	if err := runtime.DefaultUnstructuredConverter.FromUnstructured(unstructuredObj.UnstructuredContent(), infraObj); err != nil {
@@ -709,6 +800,9 @@ func gatherInfraConditions(ctx context.Context, objRef *corev1.ObjectReference, 
 // warnIfFalsyInfraConditions logs warning messages for any conditions that are not "True"
 // in the infra cluster or machine status.
 func warnIfFalsyInfraConditions(ctx context.Context, objRef *corev1.ObjectReference, cl client.Client) {
+	if objRef == nil {
+		return
+	}
 	apiVersion, kind := objRef.GroupVersionKind().ToAPIVersionAndKind()
 	objInfo := fmt.Sprintf("apiVersion=%s, kind=%s, namespace=%s, name=%s", apiVersion, kind, objRef.Namespace, objRef.Name)
 
@@ -721,9 +815,9 @@ func warnIfFalsyInfraConditions(ctx context.Context, objRef *corev1.ObjectRefere
 
 	logrus.Infof("Checking conditions for %s", objInfo)
 	if len(conditions) > 0 {
-		var falsyConditions clusterv1.Conditions
+		var falsyConditions []conditionInfo
 		for _, condition := range conditions {
-			if condition.Status != corev1.ConditionTrue {
+			if condition.Status != string(corev1.ConditionTrue) {
 				falsyConditions = append(falsyConditions, condition)
 			}
 		}
